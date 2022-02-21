@@ -49,7 +49,7 @@ class Group(Symbol):
                 child.parent = self
             if isinstance(child, Group) and isinstance(child.symbols[0], ParentSymbol):
                 child.symbols[0].folder = child.folder
-                child.symbols[0].parent = self
+                child.symbols[0].parent = self if not is_root else None
         self.is_group = True
 
     def __iter__(self):
