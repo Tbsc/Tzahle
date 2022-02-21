@@ -42,11 +42,14 @@ class Group(Symbol):
         self.children = children
         self.is_unit = is_unit
         self.is_root = is_root
-        for folder, tag in children.items():
-            tag.folder = folder
-            if tag.parent is None:
-                tag.parent = None if is_root else self
         self.symbols = [*([] if is_root or not is_unit else [ParentSymbol(self)]), *self.children.values()]
+        for folder, child in children.items():
+            child.folder = folder
+            if child.parent is None and not is_root:
+                child.parent = self
+            if isinstance(child, Group) and isinstance(child.symbols[0], ParentSymbol):
+                child.symbols[0].folder = child.folder
+                child.symbols[0].parent = self
         self.is_group = True
 
     def __iter__(self):
@@ -57,7 +60,6 @@ class ParentSymbol(Symbol):
     """Holds a group as a symbol."""
     def __init__(self, group: Group):
         super().__init__(group.name, group.alt_names, group.image_name)
-        self.parent = group
         self.group = group
 
 
