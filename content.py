@@ -34,6 +34,9 @@ class Symbol:
     def asdict(self):
         return {'name': self.name, 'alt_names': self.alt_names, 'image_name': self.image_name}
 
+    def __iter__(self):
+        yield self
+
 
 class Group(Symbol):
     def __init__(self, name: str, alt_names: list[str], image_name: str, children: dict[str, Symbol], is_unit=True,
