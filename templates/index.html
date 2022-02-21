@@ -45,13 +45,13 @@
         {% for tag in c.handle_request(q, r) %}
             {% if tag.is_unit or (not tag.is_unit and c.is_parent_symbol(tag)) or (tag.is_group and not c.is_parent_symbol(tag)) %}
                 <div class="unit_tag">
-                    <a href="/?q={{ c."><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}" id="{{ tag.folder }}"></a>
+                    <a href="/?q={{ c.get_folder_path(tag, '-') }}"><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}" id="{{ tag.folder }}"></a>
                     <h5>{{ tag.name }} {% if tag.is_group and not c.is_parent_symbol(tag) %}>{% endif %}</h5>
                 </div>
             {% endif %}
         {% endfor %}
     </main>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="static/app.js"></script>
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    <script src="static/app.js"></script>-->
 </body>
 </html>

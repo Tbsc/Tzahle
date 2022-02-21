@@ -9,5 +9,5 @@ app = Flask(__name__)
 def main():
     return render_template('index.html',
                            c=content,
-                           q=request.args.get('q', default='').replace('-', '/'),
+                           q=request.args.get('q', default=''),
                            r='r' in request.args)

@@ -236,10 +236,10 @@ unit_tags = Group('תגי יחידה', [], '', {
 }, is_unit=False, is_root=True)
 
 
-def find_unit_tag(path: str):
+def find_unit_tag(path: str, joiner='/'):
     """Get the wanted unit tag, following the given path. The path must be slash-separated. Returns the symbol
     object or None if not found. Can return both groups and symbols, using the same syntax."""
-    paths = path.split('/')
+    paths = path.split(joiner)
     ret = unit_tags
     try:
         for folder in paths:
@@ -250,26 +250,30 @@ def find_unit_tag(path: str):
     return ret
 
 
-def join_path(base, folder):
-    return base + '/' + folder
+def join_path(base, folder, joiner='/'):
+    return base + joiner + folder
 
 
-def find_path(tag: Symbol) -> str:
+def find_path(tag: Symbol, joiner='/') -> str:
     """Traverses the parent tree to create a string describing the path of the tag"""
     ret = ''
     parent: Group = tag.parent
     while parent is not None:
-        ret = join_path(parent.folder, ret)
+        ret = join_path(parent.folder, ret, joiner)
         parent = parent.parent
     return ret
 
 
-def get_image_path(tag: Symbol):
-    return find_path(tag) + tag.image_name
+def get_image_path(tag: Symbol, joiner='/'):
+    return find_path(tag, joiner) + tag.image_name
 
 
-def get_full_image_path(tag: Symbol):
-    return 'static/units/' + get_image_path(tag)
+def get_folder_path(tag: Symbol, joiner='/'):
+    return find_path(tag, joiner) + tag.folder
+
+
+def get_full_image_path(tag: Symbol, joiner='/'):
+    return f'static{joiner}units{joiner}' + get_image_path(tag)
 
 
 def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
@@ -283,15 +287,15 @@ def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
     return list(ret)
 
 
-def get_all_tags_path(path: str) -> list[Symbol]:
-    return get_all_unit_tags(find_unit_tag(path))
+def get_all_tags_path(path: str, joiner='/') -> list[Symbol]:
+    return get_all_unit_tags(find_unit_tag(path, joiner))
 
 
 def handle_request(query, recurse):
     if recurse:
-        return get_all_tags_path(query)
+        return get_all_tags_path(query, '-')
     else:
-        return find_unit_tag(query)
+        return find_unit_tag(query, '-')
 
 
 def is_parent_symbol(tag):
