@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<header>
+    {% block header %}{% endblock %}
+</header>
+<main>
+    {% block main %} {% endblock %}
+</main>
+<footer>
+    באתר זה נעשה שימוש בסמלי ותגי יחידה של צה"ל מ<a href="/?q=sections-operations-spokesperson" id="dotzlink">דובר צה"ל</a> ללא כל שינוי תחת רישיון CC BY-SA 3.0.
+    {% block footer %}{% endblock %}
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

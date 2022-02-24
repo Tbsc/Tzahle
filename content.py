@@ -45,6 +45,9 @@ class Symbol:
     def __iter__(self):
         yield self
 
+    def __reversed__(self):
+        yield self
+
 
 class Group(Symbol):
     def __init__(self, name: str, alt_names: list[str], image_name: str, children: dict[str, Symbol], is_unit=True,
@@ -58,6 +61,7 @@ class Group(Symbol):
             child.folder = folder
             if child.parent is None and not is_root:
                 child.parent = self
+            # Supply all group children's ParentSymbol with its information
             if isinstance(child, Group) and isinstance(child.symbols[0], ParentSymbol):
                 child.symbols[0].folder = child.folder
                 child.symbols[0].parent = self if not is_root else None
@@ -65,6 +69,9 @@ class Group(Symbol):
 
     def __iter__(self):
         return iter(self.symbols)
+
+    def __reversed__(self):
+        return reversed(self.symbols)
 
 
 class ParentSymbol(Symbol):
@@ -268,7 +275,7 @@ def join_path(base, folder, joiner='/'):
 
 
 def find_path(tag: Symbol, joiner='/') -> str:
-    """Traverses the parent tree to create a string describing the path of the tag"""
+    """Traverses the parent chain to create a string describing the path of the tag"""
     ret = ''
     parent: Group = tag.parent
     while parent is not None:
@@ -301,15 +308,10 @@ def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
 
 
 def get_all_tags_path(path: str, joiner='/') -> list[Symbol]:
+    """Recursively returns all unit tags in a group, specified by path"""
     return get_all_unit_tags(find_unit_tag(path, joiner))
 
 
-def handle_request(query, recurse):
-    if recurse:
-        return get_all_tags_path(query, '-')
-    else:
-        return find_unit_tag(query, '-')
-
-
 def is_parent_symbol(tag):
+    """Is the tag a ParentSymbol, that is a group that is being displayed as a unit and not a group"""
     return isinstance(tag, ParentSymbol)

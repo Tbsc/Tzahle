@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Tzahle{% endblock %}
+
+{% block head %}
+<style>
+main {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 20px;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+<h1>מאגר תגי יחידה</h1>
+{% endblock %}
+
+{% block main %}
+    {% for tag in d.handle_web_request(q, r) %}
+        <div class="unit_tag">
+            <a href="{{ d.build_href(tag, r) }}"><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}" id="{{ tag.folder }}"></a>
+            <h5>{{ d.build_name(tag) }}</h5>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="static/app.js"></script>-->
+{% endblock %}

@@ -1,0 +1,43 @@
+html {
+    font-family: sans-serif;
+    background-color: aliceblue;
+    direction: rtl;
+    font-size: 1em;
+}
+
+header {
+    text-align: center;
+}
+
+.unit_tag {
+    width: 200px;
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    font-size: calc(1rem - 0.3vw);
+}
+
+@media (max-width: 960px) {
+    footer {
+        font-size: calc(1rem - 1vw);
+    }
+
+    .unit_tag {
+        width: 160px;
+    }
+}
+
+.unit_tag_img {
+    max-width: 100%;
+}
+
+#dotzlink:not(:hover) {
+    text-decoration: none;
+    color: inherit;
+}
+
+textarea {
+    resize: none;
+}
