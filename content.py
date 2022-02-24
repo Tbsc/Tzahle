@@ -94,20 +94,45 @@ def hatmar_combo(name: str, num: str) -> tuple[str, list[str]]:
     return make_combos(('עוצבת', 'חטיבת', 'חטמ"ר'), name, ('חטיבה', 'חטמ"ר', 'עוצבה'), num)
 
 
-def unit_combo(type: tuple, commands: tuple):
-    return list(map(lambda x: " ".join(x),
-                    itertools.product(('יחידת', 'מחלקת'), type, ('בפיקוד', 'פיקוד'), commands)))
+def join_product(product):
+    return list(map(lambda x: " ".join(filter(None, x)), product))
 
 
-def tikshuv_combo(gdud: str):
+def unit_combo(unit_type: tuple, commands: tuple, add_attr=tuple()):
+    return join_product(itertools.product(('יחידת', 'מחלקת', *add_attr), unit_type, ('בפיקוד', 'פיקוד', None), commands))
+
+
+def health_combo(command):
+    return unit_combo(('הרפואה', 'רפואה'), (command, 'ה' + command), ('חיל',))
+
+
+def intelligence_combo(command):
+    return unit_combo(('המודיעין', 'מודיעין'), (command, 'ה' + command))
+
+
+def ammunition_combo(command, num):
+    return f'יחידת החימוש המרחבית {num}', [f'יחידת חימוש מרחבית {num}', f'יחידת חימוש מרחבית {command}', f'אגד טכנולוגיה ואחזקה מרחבי {num}',
+            f'אטנא"ם {num}', f'יחידת חימוש {num}', f'יחידת חימוש {command}']
+
+
+def tikshuv_combo(gdud: str, alt_definite=False):
     start = 'גדוד'
     start_tik = 'גדוד תקשוב'
     start_hatik = 'גדוד התקשוב'
-    return f'{start_tik} {gdud}', [gdud, f'{start} {gdud}', f'{start_hatik} {gdud}']
+    ret = []
+    if alt_definite and gdud[0] == 'ה':
+        gdud_un = gdud[1:]
+        ret = [gdud_un, f'{start}, {gdud_un}', f'{start_hatik} {gdud_un}']
+    return f'{start_tik} {gdud}', ret + [gdud, f'{start} {gdud}', f'{start_hatik} {gdud}']
+
+
+def isuf_combo(name: str, num: str, with_unit_names=False):
+    return join_product(itertools.product(('גדוד', 'יחידת', None) if with_unit_names else ('גדוד',),
+                                          (None, 'איסוף', 'איסוף קרבי'), (f'{name}', f'{num}', f'{name} {num}')))
 
 
 __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיקה', ['אגף לוגיסטיקה', 'אגף טכנולוגיה ולוגיסטיקה', 'אט"ל'], 'logitech.png', {
-    'technology': Group('חיל הטכנולוגיה והאחזקה', ['חיל החימוש', 'חיל טכנולוגיה ואחזקה', 'חיל הטנ"א', 'חיל טנ"א'], 'technology.jpg', {
+    'technology': Group('חיל הטכנולוגיה והאחזקה', ['חיל החימוש', 'חיל טכנולוגיה ואחזקה', 'חיל הטנ"א', 'חיל טנ"א', 'חיל הטכנולוגיה', 'חיל טכנולוגיה'], 'technology.png', {
         'repair': Symbol('מרכז שיקום ואחזקה', ['מרכז השיקום והאחזקה', 'מש"א', 'מש"א 7000'], 'repair.png'),
         'ammunition': Symbol('מרכז התחמושת', ['מרכז תחמושת', 'מרת"ח'], 'ammunition.png')
     }),
@@ -133,61 +158,92 @@ __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיק�
 unit_tags = Group('תגי יחידה', [], '', {
     'general': Symbol('המטה הכללי', ['מטה כללי', 'מטכ"ל'], 'general.png'),
     'commands': Group('פיקודים', [], '', {
-        'north': Group('פיקוד הצפון', ['פיקוד צפון', 'פצ"ן'], 'north.gif', {
+        'north': Group('פיקוד הצפון', ['פיקוד צפון', 'פצ"ן'], 'north.png', {
             'gaash': Group('עוצבת געש (אוגדה 36)', ['עוצבת געש', 'אוגדה 36', 'עוצבת געש 36'], 'gaash.png', {
-                'seon': Symbol('גדוד תקשוב שיאון', ['שיאון', 'גדוד שיאון'], 'seon.png'),
-                'logistics': Symbol('אגד לוגיסטי עוצבת געש', ['אגד לוגיסטי'], 'logistics.png')
+                'seon': Symbol('גדוד תקשוב שיאון', join_product(
+                    itertools.product(('גדוד תקשוב', 'גדוד', 'גדוד התקשוב', None), ('שיאון', 'שאון'))), 'seon.png'),
+                'logistics': Symbol('אגד לוגיסטי עוצבת געש', ['אגד לוגיסטי געש'], 'logistics.png')
             }),
             'galil': Group('עוצבת הגליל (אוגדה 91)', ['עוצבת הגליל', 'אוגדה 91', 'עוצבת הגליל 91'], 'galil.png', {
                 'baram': Symbol(*hatmar_combo('ברעם', '300'), 'baram.png'),
                 'hiram': Symbol(*hatmar_combo('חירם', '769'), 'hiram.png'),
                 'nofim': Symbol(*tikshuv_combo('נופים'), 'nofim.png'),
-                'shahaf': Symbol('גדוד איסוף שחף 869',
-                                 ['גדוד שחף', 'גדוד 869', 'גדוד איסוף קרבי 869', 'גדוד איסוף קרבי שחף'], 'shahaf.png'),
-                'logistics': Symbol('אגד תחזוקה עוצבת הגליל', ['אגד תחזוקה', 'אגד התחזוקה'], 'logistics.png')
+                'shahaf': Symbol('גדוד איסוף שחף 869', isuf_combo('שחף', '869'), 'shahaf.png'),
+                'logistics': Symbol('אגד לוגיסטי עוצבת הגליל', ['אגד לוגיסטי הגליל'], 'logistics.png')
             }),
             'mapatz': Group('עוצבת המפץ (אוגדה 146)', ['עוצבת המפץ', 'אוגדה 146', 'אוגדה 319', 'עוצבת המפץ 146'],
                             'mapatz.png', {
-                'logistics': Symbol('אגד תחזוקה עוצבת המפץ', ['אגד תחזוקה', 'אגד התחזוקה'], 'logistics.png')
+                                'logistics': Symbol('אגד לוגיסטי עוצבת המפץ 319',
+                                                    ['אגד לוגיסטי המפץ', 'אגד לוגיסטי 319', 'אגד לוגיסטי המפץ 319'],
+                                                    'logistics.png')
             }),
             'bashan': Group('אוגדת הבשן (אוגדה 210)', ['אוגדת הבשן', 'אוגדה 210', 'אוגדת הבשן 210'], 'bashan.png', {
                 'golan': Symbol(*hatmar_combo('הגולן', '474'), 'golan.png'),
                 'snir': Symbol(*tikshuv_combo('שניר'), 'snir.png'),
-                'ayit': Symbol('גדוד איסוף עיט 595',
-                               ['גדוד עיט', 'גדוד 595', 'גדוד איסוף קרבי 595', 'גדוד איסוף קרבי עיט'], 'ayit.png'),
-                'logistics': Symbol('אגד תחזוקה אוגדת הבשן', ['אגד תחזוקה', 'אגד התחזוקה'], 'logistics.png')
+                'ayit': Symbol('גדוד איסוף עיט 595', isuf_combo('עיט', '595'), 'ayit.png'),
+                'logistics': Symbol('אגד לוגיסטי אוגדת הבשן 6366',
+                                    ['אגד לוגיסטי הבשן', 'אגד לוגיסטי 6366', 'אגד לוגיסטי הבשן 6366'], 'logistics.png')
             }),
-            'health': Symbol('יחידת הרפואה בפיקוד הצפון',
-                             unit_combo(('רפואה', 'הרפואה'), ('צפון', 'הצפון')), 'health.png'),
-            'eliakim': Symbol('בא"פ אליקים',
-                              ['בסיס אימונים פיקודי צפון', 'בסיס אימונים פיקודי אליקים', 'בסיס אימונים צפון',
-                               'בסיס אימונים אליקים'], 'eliakim.png'),
-            'ammunition': Symbol('יחידת החימוש המרחבית 651',
-                                 ['יחידת חימוש מרחבית 651', 'יחידת חימוש מרחבית צפון', 'אגד טכנולוגיה ואחזקה מרחבי 651',
-                                  'אטנא"ם 651'], 'ammunition.png'),
-            'intelligence': Symbol('מחלקת המודיעין בפיקוד הצפון',
-                                   unit_combo(('המודיעין', 'מודיעין'), ('צפון', 'הצפון')), 'intelligence.png'),
-            'logistics5001': Symbol('אגד לוגיסטי מרחבי 5001', ['אלמ"ר 5001'], 'logistics5001.png'),
-            'logistics5002': Symbol('אגד לוגיסטי מרחבי 5002', ['אלמ"ר 5002'], 'logistics5002.png'),
+            'health': Symbol('יחידת הרפואה בפיקוד הצפון', health_combo('צפון'), 'health.png'),
+            'eliakim': Symbol('בסיס אימונים פיקודי אליקים',
+                              ['בסיס אימונים פיקודי צפון', 'בא"פ אליקים', 'בסיס אימונים צפון',
+                               'בסיס אימונים אליקים', 'בא"פ צפון', 'בסיס אליקים'], 'eliakim.png'),
+            'ammunition': Symbol(*ammunition_combo('צפון', '651'), 'ammunition.png'),
+            'intelligence': Symbol('מחלקת המודיעין בפיקוד הצפון', intelligence_combo('צפון'), 'intelligence.png'),
+            'logistics5001': Symbol('אגד לוגיסטי מרחבי 5001', ['אלמ"ר 5001', 'אגד לוגיסטי 5001'], 'logistics5001.png'),
+            'logistics5002': Symbol('אגד לוגיסטי מרחבי 5002', ['אלמ"ר 5002', 'אגד לוגיסטי 5002'], 'logistics5002.png'),
             'ayalim': Symbol(*tikshuv_combo('איילים'), 'ayalim.png'),
             'engineering': Symbol('גדוד ציוד מכני הנדסי פיקוד צפון 7064',
                                   ['גדוד צמ"ה צפון', 'צמ"ה צפון', 'גדוד 7064', 'צמ"ה', 'ציוד מכני הנדסי',
-                                   'גדוד ציוד מכני הנדסי', 'גדוד צמ"ה'], 'engineering.png')
+                                   'גדוד ציוד מכני הנדסי', 'גדוד צמ"ה', 'מפקדת הנדסה קרבית צפון',
+                                   'מפקדת הנדסה קרבית פיקוד צפון', 'מפקדת הנדסה קרבית פיקוד הצפון',
+                                   'מפקדת הנדסה קרבית בפיקוד צפון', 'מפקדת הנדסה קרבית בפיקוד הצפון'], 'engineering.png')
         }),
         'south': Group('פיקוד הדרום', ['פיקוד דרום', 'פד"ם'], 'south.png', {
             'gaza': Group('עוצבת שועלי האש (אוגדה 143)', ['אוגדת עזה', 'עוצבת שועלי האש', 'אוגדה 143', 'עוצבת שועלי האש 143', 'אוגדת עזה 143'], 'gaza.png', {
-                'geffen': Symbol('חטיבת הגפן', ['חטיבת גפן', 'החטיבה הצפונית', 'החטיבה הצפונית ברצועת עזה'], 'geffen.png'),
-                'katif': Symbol('חטיבת קטיף', [''], 'katif.png')
-            })
+                'geffen': Symbol('חטיבת הגפן', ['חטיבת גפן', 'החטיבה הצפונית', 'החטיבה הצפונית ברצועת עזה', 'חטמ"ר צפונית'], 'geffen.png'),
+                'katif': Symbol('חטיבת קטיף', ['החטיבה הדרומית', 'החטיבה הדרומית ברצועת עזה', 'חטמ"ר דרומית'], 'katif.png'),
+                'bsor': Symbol(*tikshuv_combo('הבשור', alt_definite=True), 'bsor.png'),
+                'nesher': Symbol('יחידת איסוף נשר 414', isuf_combo('נשר', '414', True), 'nesher.png')
+            }),
+            'edom': Group('עוצבת אדום (אוגדה מרחבית 80)', ['עוצבת אדום', 'אוגדה 80', 'אוגדה מרחבית 80', 'אוגמ"ר 80', 'עוצבת אדום 80'], 'edom.png', {
+                'faran': Symbol('חטיבת פארן (חטיבה 512)', ['חטמ"ר פארן', 'חטיבה 512', 'חטיבה מרחבית פארן'], 'faran.png'),
+                'yoav': Symbol('חטיבת יואב (חטיבה 406)', ['חטמ"ר יואב', 'חטיבה 406', 'חטיבה מרחבית יואב'], 'yoav.png'),
+                'marom': Symbol(*tikshuv_combo('מרום'), 'marom.png'),
+                'eitam': Symbol('גדוד איסוף איתם 727', isuf_combo('איתם', '727'), 'eitam.png'),
+            }),
+            'steel': Group('עוצבת הפלדה (אוגדה 162)', ['עוצבת הפלדה', 'אוגדה 162', 'עוצבת הפלדה 162'], 'steel.png', {
+                'afik': Symbol(*tikshuv_combo('אפיק'), 'afik.png'),
+                'logistics': Symbol('אגד לוגיסטי עוצבת הפלדה 6162', ['אגד לוגיסטי 6162', 'אגד לוגיסטי הפלדה', 'אגד לוגיסטי הפלדה 6162'], 'logistics.png')
+            }),
+            'sinai': Group('עוצבת סיני (אוגדה 252)', ['אוגדת סיני', 'עוצבת סיני', 'אוגדה 252', 'עוצבת סיני 252'], 'sinai.png', {
+                'logistics': Symbol('אגד לוגיסטי עוצבת סיני', ['אגד לוגיסטי סיני'], 'logistics.png')
+            }),
+            'health': Symbol('יחידת הרפואה בפיקוד הדרום', health_combo('דרום'), 'health.png'),
+            'tzeelim': Symbol('בסיס אימונים פיקודי צאלים',
+                              ['בסיס אימונים פיקודי דרום', 'בא"פ צאלים', 'בא"פ דרום', 'בסיס צאלים', 'בסיס אימונים דרום',
+                               'בסיס אימונים צאלים'], 'tzeelim.png'),
+            'ammunition': Symbol(*ammunition_combo('דרום', '653'), 'ammunition.png'),
+            'intelligence': Symbol('מחלקת המודיעין בפיקוד הדרום', intelligence_combo('דרום'), 'intelligence.png'),
+            'logistics': Symbol('אגד לוגיסטי מרחבי 5006',
+                                ['אלמ"ר 5006', 'אגד לוגיסטי מרחבי דרום', 'אגד לוגיסטי 5006', 'אגד לוגיסטי דרום'],
+                                'logistics.png'),
+            'raam': Symbol(*tikshuv_combo('רעם'), 'raam.png'),
+            'engineering': Symbol('גדוד ציוד מכני הנדסי פיקוד דרום 8163',
+                                  ['גדוד צמ"ה דרום', 'צמ"ה דרום', 'גדוד 8163', 'צמ"ה', 'ציוד מכני הנדסי',
+                                   'גדוד ציוד מכני הנדסי', 'גדוד צמ"ה', 'מפקדת הנדסה קרבית דרום',
+                                   'מפקדת הנדסה קרבית פיקוד דרום', 'מפקדת הנדסה קרבית פיקוד הדרום',
+                                   'מפקדת הנדסה קרבית בפיקוד דרום', 'מפקדת הנדסה קרבית בפיקוד הדרום'],
+                                  'engineering.png')
         }),
-        'center': Group('פיקוד המרכז', ['פיקוד מרכז', 'פקמ"ז'], 'center.gif', {
+        'center': Group('פיקוד המרכז', ['פיקוד מרכז', 'פקמ"ז'], 'center.png', {
             'ayosh': Group('אוגדת איו"ש (אוגדה 877)', ['אוגדת איו"ש', 'אוגדה 877', 'אוגדת יו"ש', 'אוגדת יהודה ושומרון',
                                                'אוגדת אזור יהודה ושומרון'], 'ayosh.png', {
 
             })
         }),
-        'oref': Symbol('פיקוד העורף', ['פקע"ר'], 'oref.gif'),
-        'depth': Symbol('מפקדת העומק', ['פיקוד העומק', 'מפע"ם'], 'depth.gif')
+        'oref': Symbol('פיקוד העורף', ['פקע"ר'], 'oref.png'),
+        'depth': Symbol('מפקדת העומק', ['פיקוד העומק', 'מפע"ם'], 'depth.png')
     }, is_unit=False),
     'forces': Group('זרועות', [], '', {
         'ground': Group('זרוע היבשה', [], 'ground.png', {
@@ -218,16 +274,9 @@ unit_tags = Group('תגי יחידה', [], '', {
         })
     }, is_unit=False),
     'sections': Group('אגפים', [], '', {
-        'intelligence': Symbol('אגף המודיעין', ['אמ"ן', 'אגף מודיעין'], 'intelligence.png'),
-        'planning': Symbol('אגף התכנון ובניין הכוח הרב-זרועי',
-                           ['אג"ת', 'אגף התכנון', 'אגף בניין הכוח', 'אגף בניין כוח', 'אגף תכנון ובניין כוח',
-                            'אגף תכנון ובניין כוח רב זרועי'], ''),
-        'tikshuv': Group('אגף התקשוב וההגנה בסב"ר', ['אגף תקשוב', 'אגף התקשוב וההגנה בסייבר', 'את"ק'], '', {
-
-        }),
-        'personnel': Group('אגף כוח האדם', ['אגף כוח אדם', 'אכ"א'], '', {
-            'meitav': Symbol('יחידת מיטב', ['מיטב', 'בקו"ם'], 'meitav.png'),
-            'police': Group('חיל המשטרה הצבאית', ['משטרה צבאית', 'חיל משטרה צבאית', 'מ"ץ'], '', {
+        'personnel': Group('אגף כוח האדם', ['אגף כוח אדם', 'אכ"א'], 'personnel.png', {
+            'meitav': Symbol('מיטב', ['מיט"ב', 'בקו"ם', 'יחידת מיט"ב'], 'meitav.png'),
+            'police': Group('חיל המשטרה הצבאית', ['משטרה צבאית', 'חיל משטרה צבאית', 'מ"ץ'], 'police.png', {
 
             }),
             'adjutant': Symbol('חיל משאבי האנוש', ['חיל משאבי אנוש', 'משא"ן'], 'adjutant.png'),
@@ -239,12 +288,17 @@ unit_tags = Group('תגי יחידה', [], '', {
                 'complaints': Symbol('נציבות קבילות החיילים', ['נציב קבילות החיילים', 'נקח"ל'], 'complaints.png')
             })
         }),
-        'operations': Group('אגף המבצעים', ['אגף מבצעים', 'אמ"ץ'], '', {
-            'spokesperson': Symbol('דובר צה"ל', ['דו"ץ'], 'spokesperson.jpg')
+        'operations': Group('אגף המבצעים', ['אגף מבצעים', 'אמ"ץ', 'אג"ם', 'אגף המטה הכללי', 'אגף מטה כללי'], 'operations.png', {
+            'spokesperson': Symbol('דובר צה"ל', ['דו"ץ', 'מערך דובר צה"ל', 'מערך דו"ץ'], 'spokesperson.png')
         }),
-        'strategy': Group('אגף אסטרטגיה ומעגל שלישי', ['אגף אסטרטגיה', 'אגף האסטרטגיה', 'אגא"ס'], '', {
+        'intelligence': Symbol('אגף המודיעין', ['אמ"ן', 'אגף מודיעין'], 'intelligence.png'),
+        'tikshuv': Group('אגף התקשוב וההגנה בסב"ר', ['אגף תקשוב', 'אגף התקשוב וההגנה בסייבר', 'את"ק'], 'tikshuv.png', {
 
-        })
+        }),
+        'planning': Symbol('אגף התכנון ובניין הכוח הרב-זרועי',
+                           ['אג"ת', 'אגף התכנון', 'אגף בניין הכוח', 'אגף בניין כוח', 'אגף תכנון ובניין כוח',
+                            'אגף תכנון ובניין כוח רב זרועי'], 'planning.png'),
+        'strategy': Symbol('אגף אסטרטגיה ומעגל שלישי', ['אגף אסטרטגיה', 'אגף האסטרטגיה', 'אגא"ס'], 'strategy.png')
     }, is_unit=False),
     'courts': Symbol('יחידת בתי הדין הצבאיים',
                      ['בתי הדין הצבאיים', 'בית דין צבאי', 'יבד"ץ', 'יבד"ץ 205', 'יחידה 205', 'בתי דין צבאיים'],
