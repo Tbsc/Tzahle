@@ -1,7 +1,6 @@
 import itertools
 import re
-from collections import deque
-
+from collections import deque, OrderedDict
 
 final_letters_pattern = re.compile('("[ץךףןם])')
 final_trans = str.maketrans('ץךףןם', 'צכפנמ')
@@ -53,7 +52,7 @@ class Group(Symbol):
     def __init__(self, name: str, alt_names: list[str], image_name: str, children: dict[str, Symbol], is_unit=True,
                  is_root=False):
         super().__init__(name, alt_names, image_name)
-        self.children = children
+        self.children = OrderedDict(children)
         self.is_unit = is_unit
         self.is_root = is_root
         self.symbols = [*([] if is_root or not is_unit else [ParentSymbol(self)]), *self.children.values()]
