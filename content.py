@@ -6,6 +6,8 @@ from collections import deque
 final_letters_pattern = re.compile('("[ץךףןם])')
 final_trans = str.maketrans('ץךףןם', 'צכפנמ')
 
+no_punc_trans = str.maketrans('', '', '"()[]')
+
 
 def alt_name_processor(alt_names: list[str]):
     for name in alt_names:
@@ -16,6 +18,12 @@ def alt_name_processor(alt_names: list[str]):
             # Perhaps it's a name with multiple acronyms
             for group in finals_match.groups():
                 alt_names.append(name.replace(group, group.translate(final_trans), 1))
+    for name in alt_names:
+        # Add alternatives without any punctuation
+        # A separate loop to have alternatives without punctuation for names that were created in the previous loop
+        new = name.translate(no_punc_trans)
+        if name != new:
+            alt_names.append(new)
     return alt_names
 
 
