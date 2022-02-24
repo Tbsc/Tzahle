@@ -32,7 +32,7 @@ class Symbol:
     def __init__(self, name: str, alt_names: list[str], image_name: str):
         self.parent = None
         self.name = name
-        self.alt_names = alt_name_processor(alt_names)
+        self.alt_names = [name, *alt_name_processor(alt_names)]
         self.image_name = image_name
         self.is_unit = True
         self.is_root = False
