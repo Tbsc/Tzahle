@@ -351,12 +351,26 @@ def get_full_image_path(tag: Symbol, joiner='/'):
 
 def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
     """Returns all tags under the given group. Includes both symbols and groups marked as a unit."""
+    # If it's just a symbol and not a group (thus no children), no recursion was done, simply return the symbol
+    if not group.is_group:
+        return list(group)
+
+    # Was given a group, begin going through its immediate children
+    # All the reversing and left-appends are needed to have the result ordered correctly
+    # extendleft reverses the given iterable when appending, so a reverse to undo that
     ret = deque()
     for child in reversed(group.children.values()):
+        # Append only the end symbols, the group itself is added later outside the loop through the recursion
         if isinstance(child, Group):
             ret.extendleft(reversed(get_all_unit_tags(child)))
-        if child.is_unit and not child.is_root:
+        elif child.is_unit:
             ret.appendleft(child)
+
+    # The for loop above only adds end symbols, this is what adds the groups
+    # No need to add groups that aren't units, such as the commands or sections groups.
+    if group.is_unit:
+        ret.appendleft(group)
+
     return list(ret)
 
 
