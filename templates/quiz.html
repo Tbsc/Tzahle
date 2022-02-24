@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Tzahle Quiz{% endblock %}
+
+{% block head %}
+<style>
+main {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 20px;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+<h1>חידון צה"ל</h1>
+{% endblock %}
+
+{% block main %}
+<div class="unit_tag">
+    <img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}">
+    <form id="form-guess">
+        <input id="input-guess" type="text" required>
+    </form>
+    <div id="guess-correct" style="display: none">נחמד! <div id="postguest-name"></div></div>
+    <div id="guess-incorrect" style="display: none">לא...</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $("#input-guess").bind("keypress", function() {
+        if (event.which == 13) {
+            event.preventDefault()
+            $.post({url: "quiz", data: $("#input-guess").val(), contentType: "text/plain", success: function(data) {
+                if (data === "incorrect") {
+                    $("#guess-correct").hide()
+                    $("#guess-incorrect").show()
+                } else {
+                    $("#guess-correct").show()
+                    $("#guess-incorrect").hide()
+                    $("#postguest-name").text(data)
+                }
+            }});
+        }
+    })
+</script>
+<!--<script src="static/app.js"></script>-->
+{% endblock %}
