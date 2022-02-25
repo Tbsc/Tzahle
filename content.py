@@ -249,19 +249,19 @@ unit_tags = Group('תגי יחידה', [], '', {
     }, is_unit=False),
     'forces': Group('זרועות', [], '', {
         'ground': Group('זרוע היבשה', [], 'ground.png', {
-            'infantry': Group('חיל הרגלים', ['חיל רגלים', 'חי"ר'], '', {
+            'infantry': Group('חיל הרגלים', ['חיל רגלים', 'חי"ר'], 'infantry.png', {
 
             }),
-            'armor': Group('חיל השריון', ['חיל שריון', 'חש"ן'], '', {
+            'armor': Group('חיל השריון', ['חיל שריון', 'חש"ן'], 'armor.png', {
 
             }),
-            'engineering': Group('חיל ההנדסה הקרבית', ['חיל הנדסה קרבית', 'חיל הנדסה', 'חה"ן'], '', {
+            'engineering': Group('חיל ההנדסה הקרבית', ['חיל הנדסה קרבית', 'חיל הנדסה', 'חה"ן'], 'engineering.png', {
 
             }),
-            'artillery': Group('חיל התותחנים', ['חיל תותחנים', 'חת"ם'], '', {
+            'artillery': Group('חיל התותחנים', ['חיל תותחנים', 'חת"ם'], 'artillery.png', {
 
             }),
-            'borders': Group('חיל הגנת הגבולות', ['חיל הגנת גבולות'], '', {
+            'borders': Group('חיל הגנת הגבולות', ['חיל הגנת גבולות'], 'borders.png', {
 
             }),
             'logistics': __logistics_unit_tags,
