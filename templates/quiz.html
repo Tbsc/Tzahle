@@ -24,17 +24,19 @@ main {
     <form id="form-guess">
         <input id="input-guess" type="text" required>
     </form>
-    <div id="guess-correct" style="display: none">נחמד! <div id="postguest-name"></div></div>
+    <div id="guess-correct" style="display: none">נחמד!</div>
+    <div id="postguest-name"></div>
     <div id="guess-incorrect" style="display: none">לא...</div>
+    <button id="next">הבא</button>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    $("#input-guess").bind("keypress", function() {
-        if (event.which == 13) {
+    $("#input-guess").bind("keypress", (event) => {
+        if (event.which === 13) {
             event.preventDefault()
-            $.post({url: "quiz", data: $("#input-guess").val(), contentType: "text/plain", success: function(data) {
+            $.post({url: "quiz", data: $("#input-guess").val(), contentType: "text/plain", success: (data) => {
                 if (data === "incorrect") {
                     $("#guess-correct").hide()
                     $("#guess-incorrect").show()
@@ -45,6 +47,9 @@ main {
                 }
             }});
         }
+    })
+    $("#next").click(() => {
+        location.reload()
     })
 </script>
 <!--<script src="static/app.js"></script>-->
