@@ -20,6 +20,16 @@ def main():
                            r='r' in request.args)
 
 
+@app.route('/dir')
+@app.route('/dir/<path:tag_path>')
+def alt_main(tag_path=''):
+    return render_template('lists.html',
+                           c=content,
+                           d=display.lists,
+                           q=tag_path.replace('/', '-'),
+                           r='r' in request.args)
+
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'GET':

@@ -2,6 +2,8 @@ import itertools
 import re
 from collections import deque, OrderedDict
 
+from flask import url_for
+
 final_letters_pattern = re.compile('("[ץךףןם])')
 final_trans = str.maketrans('ץךףןם', 'צכפנמ')
 
@@ -312,6 +314,10 @@ unit_tags = Group('תגי יחידה', [], '', {
 def find_unit_tag(path: str, joiner='/'):
     """Get the wanted unit tag, following the given path. The path must be slash-separated. Returns the symbol
     object or None if not found. Can return both groups and symbols, using the same syntax."""
+    # None or empty paths mean root
+    if path is None or path == '':
+        return unit_tags
+
     paths = path.split(joiner)
     ret = unit_tags
     try:
@@ -345,8 +351,8 @@ def get_folder_path(tag: Symbol, joiner='/'):
     return find_path(tag, joiner) + tag.folder
 
 
-def get_full_image_path(tag: Symbol, joiner='/'):
-    return f'static{joiner}units{joiner}' + get_image_path(tag)
+def get_full_image_path(tag: Symbol):
+    return url_for('static', filename='units/' + get_image_path(tag))
 
 
 def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
