@@ -46,6 +46,8 @@ def quiz():
         tag = content.find_unit_tag(tag)
         guess = request.data.decode('utf-8').translate(content.no_punc_trans)
         if guess in tag.alt_names:
+            score = session.get('score', 0)
+            session['score'] = score + 1
             return tag.name
         else:
             return 'incorrect'

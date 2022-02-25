@@ -6,10 +6,19 @@
 <style>
 main {
     display: flex;
-    flex-flow: row wrap;
+    flex-direction: column;
     justify-content: center;
-    align-items: baseline;
-    gap: 20px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px
+}
+
+.guess-control {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 </style>
 {% endblock %}
@@ -21,33 +30,53 @@ main {
 {% block main %}
 <div class="unit_tag">
     <img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}">
-    <form id="form-guess">
-        <input id="input-guess" type="text" required>
-    </form>
-    <div id="guess-correct" style="display: none">נחמד!</div>
-    <div id="postguest-name"></div>
-    <div id="guess-incorrect" style="display: none">לא...</div>
-    <button id="next">הבא</button>
 </div>
+<form id="form-guess" autocomplete="off">
+    <input id="input-guess" type="search" value="" required>
+</form>
+<div id="guess-correct" style="display: none">נחמד!</div>
+<div id="guess-answer" style="display: none"></div>
+<div id="guess-incorrect" style="display: none">לא...</div>
+<div class="guess-control">
+    <button id="guess">נחש</button>
+    <button id="next">הבא</button>
+    <button id="giveup">הצג תשובה</button>
+</div>
+<div id="score-label">ניקוד: <span id="score-num">{{ session.get('score', default=0) }}</span></div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    $("#input-guess").bind("keypress", (event) => {
+    let guessBtn = $("#guess")
+    let guessBox = $("#input-guess")
+    let correct = $("#guess-correct")
+    let incorrect = $("#guess-incorrect")
+    let answer = $("#guess-answer")
+    let score = $("#score-num")
+
+    let checkGuess = () => {
+        $.post({url: "quiz", data: guessBox.val(), contentType: "text/plain", success: (data) => {
+            if (data === "incorrect") {
+                correct.hide()
+                incorrect.show()
+                answer.hide()
+            } else {
+                correct.show()
+                incorrect.hide()
+                answer.show()
+                answer.text(data)
+                score.text(parseInt(score.text()) + 1)
+            }
+        }});
+    }
+    guessBox.bind("keypress", (event) => {
         if (event.which === 13) {
             event.preventDefault()
-            $.post({url: "quiz", data: $("#input-guess").val(), contentType: "text/plain", success: (data) => {
-                if (data === "incorrect") {
-                    $("#guess-correct").hide()
-                    $("#guess-incorrect").show()
-                } else {
-                    $("#guess-correct").show()
-                    $("#guess-incorrect").hide()
-                    $("#postguest-name").text(data)
-                }
-            }});
+            checkGuess()
         }
     })
+    guessBtn.on("click", checkGuess)
+
     $("#next").click(() => {
         location.reload()
     })
