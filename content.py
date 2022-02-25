@@ -109,7 +109,7 @@ def health_combo(command):
 
 
 def intelligence_combo(command):
-    return unit_combo(('המודיעין', 'מודיעין'), (command, 'ה' + command))
+    return unit_combo(('המודיעין', 'מודיעין'), (command, 'ה' + command), (None,))
 
 
 def ammunition_combo(command, num):
@@ -209,8 +209,8 @@ unit_tags = Group('תגי יחידה', [], '', {
                 'nesher': Symbol('יחידת איסוף נשר 414', isuf_combo('נשר', '414', True), 'nesher.png')
             }),
             'edom': Group('עוצבת אדום (אוגדה מרחבית 80)', ['עוצבת אדום', 'אוגדה 80', 'אוגדה מרחבית 80', 'אוגמ"ר 80', 'עוצבת אדום 80'], 'edom.png', {
-                'faran': Symbol('חטיבת פארן (חטיבה 512)', ['חטמ"ר פארן', 'חטיבה 512', 'חטיבה מרחבית פארן'], 'faran.png'),
-                'yoav': Symbol('חטיבת יואב (חטיבה 406)', ['חטמ"ר יואב', 'חטיבה 406', 'חטיבה מרחבית יואב'], 'yoav.png'),
+                'faran': Symbol('חטיבת פארן (חטיבה 512)', ['חטמ"ר פארן', 'חטיבה 512', 'חטיבה מרחבית פארן', 'חטיבת פארן'], 'faran.png'),
+                'yoav': Symbol('חטיבת יואב (חטיבה 406)', ['חטמ"ר יואב', 'חטיבה 406', 'חטיבה מרחבית יואב', 'חטיבת יואב'], 'yoav.png'),
                 'marom': Symbol(*tikshuv_combo('מרום'), 'marom.png'),
                 'eitam': Symbol('גדוד איסוף איתם 727', isuf_combo('איתם', '727'), 'eitam.png'),
             }),
