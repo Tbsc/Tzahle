@@ -21,6 +21,7 @@ def main():
 
 
 @app.route('/dir')
+@app.route('/dir/')
 @app.route('/dir/<path:tag_path>')
 def alt_main(tag_path=''):
     return render_template('lists.html',
