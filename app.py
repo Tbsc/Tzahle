@@ -44,3 +44,7 @@ def quiz():
 @app.route('/favicon.ico')
 def favicon():
     return flask.send_from_directory(os.path.join(app.root_path, 'static/units/sections'), 'operations.png')
+
+
+if __name__ == '__main__':
+    app.run()
