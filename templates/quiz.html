@@ -29,14 +29,13 @@ main {
 
 {% block main %}
 <div class="unit_tag">
-    <img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}">
+    <a id="unit_tag_link"><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}"></a>
 </div>
 <form id="form-guess" autocomplete="off">
-    <input id="input-guess" type="search" value="" required>
+    <input id="input-guess" type="search" value="" required autofocus>
 </form>
-<div id="guess-correct" style="display: none">נחמד!</div>
+<div id="guess-message" style="display: none"></div>
 <div id="guess-answer" style="display: none"></div>
-<div id="guess-incorrect" style="display: none">לא...</div>
 <div class="guess-control">
     <button id="guess">נחש</button>
     <button id="next">הבא</button>
@@ -47,38 +46,60 @@ main {
 
 {% block scripts %}
 <script>
-    let guessBtn = $("#guess")
-    let guessBox = $("#input-guess")
-    let correct = $("#guess-correct")
-    let incorrect = $("#guess-incorrect")
-    let answer = $("#guess-answer")
-    let score = $("#score-num")
+    $(() => {
+        let guessBtn = $("#guess")
+        let guessBox = $("#input-guess")
+        let message = $("#guess-message")
+        let answer = $("#guess-answer")
+        let score = $("#score-num")
+        let giveup = $("#giveup")
 
-    let checkGuess = () => {
-        $.post({url: "quiz", data: guessBox.val(), contentType: "text/plain", success: (data) => {
-            if (data === "incorrect") {
-                correct.hide()
-                incorrect.show()
-                answer.hide()
-            } else {
-                correct.show()
-                incorrect.hide()
-                answer.show()
-                answer.text(data)
-                score.text(parseInt(score.text()) + 1)
-            }
-        }});
-    }
-    guessBox.bind("keypress", (event) => {
-        if (event.which === 13) {
-            event.preventDefault()
-            checkGuess()
+        function displayAnswer(resp) {
+            answer.show()
+            answer.text(resp["name"])
+            score.text(resp["score"])
+            $("#unit_tag_link").prop("href", resp["rel_path"])
         }
-    })
-    guessBtn.on("click", checkGuess)
 
-    $("#next").click(() => {
-        location.reload()
+        function showMessage(msg) {
+            message.show()
+            message.text(msg)
+        }
+
+        function checkGuess() {
+            // Use the visibily of the answer div to determine if the player successfully guessed already
+            if (!answer.visible()) {
+                $.post({url: "quiz", data: guessBox.val(), contentType: "text/plain", success: (data) => {
+                    if (data === "incorrect") {
+                        showMessage("לא...")
+                    } else {
+                        showMessage("נחמד!")
+                        displayAnswer(data)
+                    }
+                }});
+            }
+        }
+        guessBox.bind("keypress", (event) => {
+            if (event.which === 13) {
+                event.preventDefault()
+                checkGuess()
+            }
+        })
+        guessBtn.on("click", checkGuess)
+
+        $("#next").click(() => {
+            location.reload()
+        })
+
+        giveup.click(() => {
+            $.post({
+                url: "/quiz", data: "giveup", contentType: "text/plain", success: (data) => {
+                    showMessage("חבל...")
+                    displayAnswer(data)
+                    guessBtn.prop("disabled", true)
+                }
+            })
+        })
     })
 </script>
 <!--<script src="static/app.js"></script>-->
