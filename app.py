@@ -54,7 +54,7 @@ def quiz():
             return 'error'
         tag = content.find_unit_tag(tag_path)
         answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('alt_main', tag_path=tag_path),
-                       'score': session['score']}
+                       'score': score()}
 
         guess = request.data.decode('utf-8').translate(content.no_punc_trans).strip()
 
@@ -63,10 +63,17 @@ def quiz():
 
         if guess in tag.alt_names:
             answer_dict['score'] += 1
-            session['score'] = answer_dict['score']
+            score(answer_dict['score'])
             return answer_dict
         else:
             return 'incorrect'
+
+
+def score(new=None):
+    if new is None:
+        return session.get('score', 0)
+    else:
+        session['score'] = new
 
 
 if __name__ == '__main__':
