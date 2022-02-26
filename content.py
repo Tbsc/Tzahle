@@ -181,6 +181,7 @@ unit_tags = Group('תגי יחידה', [], '', {
             }),
             'bashan': Group('אוגדת הבשן (אוגדה 210)', ['אוגדת הבשן', 'אוגדה 210', 'אוגדת הבשן 210'], 'bashan.png', {
                 'golan': Symbol(*hatmar_combo('הגולן', '474'), 'golan.png'),
+                'hermon': Symbol(*hatmar_combo('החרמון', '810'), 'hermon.png'),
                 'snir': Symbol(*tikshuv_combo('שניר'), 'snir.png'),
                 'ayit': Symbol('גדוד איסוף עיט 595', isuf_combo('עיט', '595'), 'ayit.png'),
                 'logistics': Symbol('אגד לוגיסטי אוגדת הבשן 6366',
