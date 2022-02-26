@@ -15,12 +15,8 @@ if app.secret_key is None:
 
 
 @app.route('/')
-def main():
-    return render_template('lists.html',
-                           c=content,
-                           d=display.lists,
-                           q=request.args.get('q', default=''),
-                           r='r' in request.args)
+def index():
+    return render_template('index.html')
 
 
 @app.route('/dir/')

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Tzahle{% endblock %}
+
+{% block head %}
+<style>
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+<h1>צָהֶ"ל</h1>
+{% endblock %}
+
+{% block main %}
+<div>
+    <a href="{{ url_for('units_dir') }}"><h2>מאגר</h2></a>
+</div>
+<div>
+    <a href="{{ url_for('quiz') }}"><h2>חידון</h2></a>
+</div>
+{% endblock %}
