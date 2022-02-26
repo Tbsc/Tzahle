@@ -8,7 +8,10 @@ import display.quiz
 
 
 app = Flask(__name__)
-app.secret_key = b'aTemporRsaySecretKeyBEcauseIcan"tMkaesomethginbNOw'
+# Secret key used for development, set it if one hasn't been set already
+if app.secret_key is None:
+    app.secret_key = os.environ.get('SECRET_KEY',
+                                    '64b29b9e8f970f9fc7fbc10bc20585841162bd3fe1088b1a47b227e19620471c8b2e1a422bc3d7730864db8c3952b8ae')
 
 
 @app.route('/')
