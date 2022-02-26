@@ -66,9 +66,14 @@ main {
             message.text(msg)
         }
 
-        function checkGuess() {
+        function answerShown() {
             // Use the visibility of the answer div to determine if the player successfully guessed already
-            if (answer.css("display") === "none") {
+            return answer.css("display") !== "none"
+        }
+
+        function checkGuess() {
+            // Only allow guessing as long as the answer wasn't shown
+            if (!answerShown()) {
                 $.post({url: "quiz", data: guessBox.val(), contentType: "text/plain", success: (data) => {
                     if (data === "incorrect") {
                         showMessage("לא...")
@@ -92,13 +97,19 @@ main {
         })
 
         giveup.click(() => {
-            $.post({
-                url: "/quiz", data: "giveup", contentType: "text/plain", success: (data) => {
-                    showMessage("חבל...")
-                    displayAnswer(data)
-                    guessBtn.prop("disabled", true)
-                }
-            })
+            // Ponder upon a player guessing correctly, then pressing the show answer button only to have their
+            // success nullified. That is definitely not wanted, I can assure you.
+            // I mean, the effect is minimal, doing this doesn't cancel out the point earned and is quickly erased
+            // when the page is reloaded, but still, it's not a good experience for the player.
+            if (!answerShown()) {
+                $.post({
+                    url: "/quiz", data: "giveup", contentType: "text/plain", success: (data) => {
+                        showMessage("חבל...")
+                        displayAnswer(data)
+                        guessBtn.prop("disabled", true)
+                    }
+                })
+            }
         })
     })
 </script>
