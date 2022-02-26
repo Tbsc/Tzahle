@@ -23,14 +23,16 @@ def main():
                            r='r' in request.args)
 
 
-@app.route('/dir')
 @app.route('/dir/')
+@app.route('/dir')
 @app.route('/dir/<path:tag_path>')
-def alt_main(tag_path=''):
+def units_dir(tag_path=''):
+    if tag_path == '' and 'q' in request.args:
+        tag_path = request.args['q'].replace('-', '/')
     return render_template('lists.html',
                            c=content,
                            d=display.lists,
-                           q=tag_path.replace('/', '-'),
+                           q=tag_path,
                            r='r' in request.args)
 
 
@@ -56,7 +58,7 @@ def quiz():
         if tag_path is None:
             return 'error'
         tag = content.find_unit_tag(tag_path)
-        answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('alt_main', tag_path=tag_path),
+        answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('units_dir', tag_path=tag_path),
                        'score': score()}
 
         guess = request.data.decode('utf-8').translate(content.no_punc_trans).strip()

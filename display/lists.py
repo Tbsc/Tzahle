@@ -1,11 +1,12 @@
+from flask import url_for
 import content as c
 
 
 def handle_web_request(query, recurse):
     if recurse:
-        ret = c.get_all_tags_path(query, '-')
+        ret = c.get_all_tags_path(query)
     else:
-        ret = c.find_unit_tag(query, '-')
+        ret = c.find_unit_tag(query)
     return filter(should_display_tag, ret)
 
 
@@ -28,7 +29,7 @@ def should_display_tag(tag):
 
 def build_href(tag, r):
     """Construct a unit tag's link. Preserves recursive mode."""
-    return f'/?q={c.get_folder_path(tag, "-")}{"&r=" if r else ""}'
+    return url_for('units_dir', tag_path=c.get_folder_path(tag)) + ('?r=' if r else '')
 
 
 def build_name(tag):
