@@ -7,7 +7,7 @@ from flask import url_for
 final_letters_pattern = re.compile('("[ץךףןם])')
 final_trans = str.maketrans('ץךףןם', 'צכפנמ')
 
-no_punc_trans = str.maketrans('', '', '"()[]')
+no_punc_trans = str.maketrans('', '', '"“\'`()[],-')
 
 
 def alt_name_processor(alt_names: list[str]):
