@@ -52,13 +52,15 @@ main {
         let message = $("#guess-message")
         let answer = $("#guess-answer")
         let score = $("#score-num")
+        let tagLink = $("#unit_tag_link")
         let giveup = $("#giveup")
 
         function displayAnswer(resp) {
             answer.show()
             answer.text(resp["name"])
             score.text(resp["score"])
-            $("#unit_tag_link").prop("href", resp["rel_path"])
+            tagLink.prop("href", resp["rel_path"])
+            guessBtn.prop("disabled", true)
         }
 
         function showMessage(msg) {
@@ -106,7 +108,6 @@ main {
                     url: "/quiz", data: "giveup", contentType: "text/plain", success: (data) => {
                         showMessage("חבל...")
                         displayAnswer(data)
-                        guessBtn.prop("disabled", true)
                     }
                 })
             }
