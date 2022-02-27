@@ -11,12 +11,18 @@ $(() => {
     let tagLink = $("#unit_tag_link")
     let giveup = $("#giveup")
 
-    function displayAnswer(resp, disableGuessBtn = true) {
+    function setDisabled(elem, state) {
+        elem.prop("disabled", state)
+    }
+
+    function displayAnswer(resp, doDisableGuessBtn = true) {
         answer.show()
         answer.text(resp["name"])
         score.text(resp["score"])
         tagLink.prop("href", resp["rel_path"])
-        guessBtn.prop("disabled", disableGuessBtn)
+        if (doDisableGuessBtn) {
+            setDisabled(guessBtn, doDisableGuessBtn)
+        }
     }
 
     function showMessage(msg) {
@@ -29,9 +35,19 @@ $(() => {
         return answer.css("display") !== "none"
     }
 
+    function setAllowInputGuess(state) {
+        setDisabled(guessBox, !state)
+        setDisabled(guessBtn, !state)
+    }
+
     function checkGuess() {
         // Only allow guessing as long as the answer wasn't shown
         if (!answerShown()) {
+            // Block guessing again until backend responds
+            setAllowInputGuess(false)
+            let tooLongTimer = setTimeout(() => {
+                showMessage("הבדיקה לוקחת יותר מדי זמן...")
+            }, 500)
             $.post({
                 url: "quiz", data: guessBox.val(), contentType: contentType, success: (data) => {
                     // This is the success callback, so 400 errors won't reach this
@@ -41,8 +57,12 @@ $(() => {
                     } else {
                         showMessage("נחמד!")
                         displayAnswer(data)
+                        setDisabled(giveup, true)
                     }
                 }
+            }).always(() => {
+                clearTimeout(tooLongTimer)
+                setAllowInputGuess(true)
             });
         }
     }
