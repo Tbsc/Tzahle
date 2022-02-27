@@ -1,3 +1,4 @@
+import csv
 import os
 
 from flask import Flask, render_template, request, session
@@ -44,33 +45,72 @@ def quiz():
     incorrect, the string "incorrect" is returned."""
     if request.method == 'GET':
         tag = display.quiz.random_tag()
-        session['tag'] = content.get_folder_path(tag)
+        sess_tag_path(content.get_folder_path(tag))
         return render_template('quiz.html',
                                c=content,
                                d=display.quiz,
                                tag=tag)
     else:
-        tag_path = session.get('tag', default=None)
+        tag_path = sess_tag_path()
         if tag_path is None:
-            return 'error'
+            return 'bad path', 400
         tag = content.find_unit_tag(tag_path)
+        if tag is None:
+            return 'bad path', 400
         answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('units_dir', tag_path=tag_path),
-                       'score': score()}
+                       'score': sess_score()}
 
         guess = request.data.decode('utf-8').translate(content.no_punc_trans).strip()
 
         if guess == 'giveup':
             return answer_dict
 
+        sess_guesses(guess)
+
         if guess in tag.alt_names:
             answer_dict['score'] += 1
-            score(answer_dict['score'])
+            sess_score(answer_dict['score'])
             return answer_dict
         else:
             return 'incorrect'
 
 
-def score(new=None):
+@app.route('/quiz/objection', methods=['POST'])
+def quiz_objection():
+    """Sent when a quiz player thinks their guess(es) should be accepted as a valid answer.
+    Uses the session to find out what the player's guesses were for what tag. No request body needed.
+    The response body has a short explanation of the error if one occurred."""
+    if 'tag_path' not in session or 'guesses' not in session:
+        return 'no session', 400
+    tag_path = sess_tag_path()
+    guesses = sess_guesses()
+    if content.find_unit_tag(tag_path) is None:
+        return 'bad path', 400
+    if len(guesses) == 0:
+        return 'no guesses', 400
+    with open(os.path.join(app.root_path, 'objections.csv'), "a", encoding='utf-8', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow((tag_path, guesses[-1], ';'.join(guesses[1:])))
+    return 'accepted', 200
+
+
+def sess_guesses(add=None):
+    if add is None:
+        return session.get('guesses', [])
+    else:
+        guesses = session.get('guesses') or []
+        guesses += [add]
+        session['guesses'] = guesses
+
+
+def sess_tag_path(new=None):
+    if new is None:
+        return session.get('tag_path', None)
+    else:
+        session['tag_path'] = new
+
+
+def sess_score(new=None):
     if new is None:
         return session.get('score', 0)
     else:

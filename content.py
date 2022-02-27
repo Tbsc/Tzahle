@@ -314,7 +314,7 @@ unit_tags = Group('תגי יחידה', [], '', {
 
 def find_unit_tag(path: str, joiner='/') -> Symbol | Group | None:
     """Get the wanted unit tag, following the given path. The path must be slash-separated. Returns the symbol
-    object or None if not found. Can return both groups and symbols, using the same syntax."""
+    object, or None if not found. Can return both groups and symbols, using the same syntax."""
     # None or empty paths mean root
     if path is None or path == '':
         return unit_tags
