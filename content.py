@@ -96,28 +96,28 @@ def hatmar_combo(name: str, num: str) -> tuple[str, list[str]]:
     return make_combos(('עוצבת', 'חטיבת', 'חטמ"ר'), name, ('חטיבה', 'חטמ"ר', 'עוצבה'), num)
 
 
-def join_product(product):
+def join_product(product: itertools.product) -> list[str]:
     return list(map(lambda x: " ".join(filter(None, x)), product))
 
 
-def unit_combo(unit_type: tuple, commands: tuple, add_attr=tuple()):
+def unit_combo(unit_type: tuple, commands: tuple, add_attr=tuple()) -> list[str]:
     return join_product(itertools.product(('יחידת', 'מחלקת', *add_attr), unit_type, ('בפיקוד', 'פיקוד', None), commands))
 
 
-def health_combo(command):
+def health_combo(command: str) -> list[str]:
     return unit_combo(('הרפואה', 'רפואה'), (command, 'ה' + command), ('חיל',))
 
 
-def intelligence_combo(command):
+def intelligence_combo(command: str) -> list[str]:
     return unit_combo(('המודיעין', 'מודיעין'), (command, 'ה' + command), (None,))
 
 
-def ammunition_combo(command, num):
+def ammunition_combo(command: str, num: str) -> tuple[str, list[str]]:
     return f'יחידת החימוש המרחבית {num}', [f'יחידת חימוש מרחבית {num}', f'יחידת חימוש מרחבית {command}', f'אגד טכנולוגיה ואחזקה מרחבי {num}',
             f'אטנא"ם {num}', f'יחידת חימוש {num}', f'יחידת חימוש {command}']
 
 
-def tikshuv_combo(gdud: str, alt_definite=False):
+def tikshuv_combo(gdud: str, alt_definite=False) -> tuple[str, list[str]]:
     start = 'גדוד'
     start_tik = 'גדוד תקשוב'
     start_hatik = 'גדוד התקשוב'
@@ -312,7 +312,7 @@ unit_tags = Group('תגי יחידה', [], '', {
 }, is_unit=False, is_root=True)
 
 
-def find_unit_tag(path: str, joiner='/'):
+def find_unit_tag(path: str, joiner='/') -> Symbol | Group | None:
     """Get the wanted unit tag, following the given path. The path must be slash-separated. Returns the symbol
     object or None if not found. Can return both groups and symbols, using the same syntax."""
     # None or empty paths mean root
@@ -330,7 +330,7 @@ def find_unit_tag(path: str, joiner='/'):
     return ret
 
 
-def join_path(base, folder, joiner='/'):
+def join_path(base: str, folder: str, joiner: str = '/') -> str:
     return base + joiner + folder
 
 
@@ -344,15 +344,15 @@ def find_path(tag: Symbol, joiner='/') -> str:
     return ret
 
 
-def get_image_path(tag: Symbol, joiner='/'):
+def get_image_path(tag: Symbol, joiner='/') -> str:
     return find_path(tag, joiner) + tag.image_name
 
 
-def get_folder_path(tag: Symbol, joiner='/'):
+def get_folder_path(tag: Symbol, joiner='/') -> str:
     return find_path(tag, joiner) + tag.folder
 
 
-def get_full_image_path(tag: Symbol):
+def get_full_image_path(tag: Symbol) -> str:
     return url_for('static', filename='units/' + get_image_path(tag))
 
 
@@ -386,6 +386,6 @@ def get_all_tags_path(path: str, joiner='/') -> list[Symbol]:
     return get_all_unit_tags(find_unit_tag(path, joiner))
 
 
-def is_parent_symbol(tag):
+def is_parent_symbol(tag: Group | Symbol) -> bool:
     """Is the tag a ParentSymbol, that is a group that is being displayed as a unit and not a group"""
     return isinstance(tag, ParentSymbol)

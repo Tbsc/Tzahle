@@ -1,8 +1,10 @@
+from typing import Iterable
+
 from flask import url_for
 import content as c
 
 
-def handle_web_request(query, recurse):
+def handle_web_request(query: str, recurse: bool) -> Iterable[c.Symbol | c.Group]:
     if recurse:
         ret = c.get_all_tags_path(query)
     else:
@@ -10,7 +12,7 @@ def handle_web_request(query, recurse):
     return filter(should_display_tag, ret)
 
 
-def should_display_tag(tag):
+def should_display_tag(tag: c.Symbol) -> bool:
     # Always show units
     if tag.is_unit:
         return True
@@ -27,11 +29,11 @@ def should_display_tag(tag):
     return True
 
 
-def build_href(tag, r):
+def build_href(tag: c.Symbol, r: bool) -> str:
     """Construct a unit tag's link. Preserves recursive mode."""
     return url_for('units_dir', tag_path=c.get_folder_path(tag)) + ('?r=' if r else '')
 
 
-def build_name(tag):
+def build_name(tag: c.Symbol) -> str:
     """Construct the name shown under the unit tag's image. If it's a group that can be opened, adds a '>' character."""
     return f'{tag.name}{" >" if tag.is_group and not c.is_parent_symbol(tag) else ""}'
