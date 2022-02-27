@@ -1,6 +1,7 @@
 import itertools
 import re
 from collections import deque, OrderedDict
+from typing import Union
 
 from flask import url_for
 
@@ -312,7 +313,7 @@ unit_tags = Group('תגי יחידה', [], '', {
 }, is_unit=False, is_root=True)
 
 
-def find_unit_tag(path: str, joiner='/') -> Symbol | Group | None:
+def find_unit_tag(path: str, joiner='/') -> Union[Symbol, Group, None]:
     """Get the wanted unit tag, following the given path. The path must be slash-separated. Returns the symbol
     object, or None if not found. Can return both groups and symbols, using the same syntax."""
     # None or empty paths mean root
@@ -386,6 +387,6 @@ def get_all_tags_path(path: str, joiner='/') -> list[Symbol]:
     return get_all_unit_tags(find_unit_tag(path, joiner))
 
 
-def is_parent_symbol(tag: Group | Symbol) -> bool:
+def is_parent_symbol(tag: Symbol) -> bool:
     """Is the tag a ParentSymbol, that is a group that is being displayed as a unit and not a group"""
     return isinstance(tag, ParentSymbol)

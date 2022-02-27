@@ -1,10 +1,10 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 from flask import url_for
 import content as c
 
 
-def handle_web_request(query: str, recurse: bool) -> Iterable[c.Symbol | c.Group]:
+def handle_web_request(query: str, recurse: bool) -> Iterable[Union[c.Symbol, c.Group]]:
     if recurse:
         ret = c.get_all_tags_path(query)
     else:
