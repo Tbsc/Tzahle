@@ -20,6 +20,15 @@ main {
     align-items: center;
     gap: 5px;
 }
+
+.start-hidden {
+    display: none
+}
+
+#input-guess {
+    /* I've been told this stops Safari on iPhone zooming into the input box when selected? */
+    font-size: 16px;
+}
 </style>
 {% endblock %}
 
@@ -34,8 +43,8 @@ main {
 <form id="form-guess" autocomplete="off">
     <input id="input-guess" type="search" value="" required autofocus>
 </form>
-<div id="guess-message" style="display: none"></div>
-<div id="guess-answer" style="display: none"></div>
+<div id="guess-message" class="start-hidden"></div>
+<div id="guess-answer" class="start-hidden"></div>
 <div class="guess-control">
     <button id="guess">נחש</button>
     <button id="next">הבא</button>
