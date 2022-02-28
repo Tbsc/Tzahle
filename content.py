@@ -174,6 +174,20 @@ def oref_combo(*area_names: str) -> NameAndAlts:
     return f'{start} {area_names[0]}', join_product(('פיקוד העורף', 'פקע"ר'), ('מחוז', 'במחוז', None), area_names)
 
 
+def infantry_combo(names: StrOrTuple, num: str, otzva: bool = False, final_adds: TupleStrs = ()) -> NameAndAlts:
+    if otzva:
+        attrs_prename = ('עוצבת', 'חטיבת')
+        attrs_prenum = ('חטיבה', 'עוצבה')
+    else:
+        attrs_prename = ('חטיבת',)
+        attrs_prenum = ('חטיבה',)
+    names = as_singleton_tuple(names)
+    return f'{attrs_prename[0]} {names[0]} ({attrs_prenum[0]} {num})', [*names, *join_product(attrs_prename, names,
+                                                                                              (num, None)),
+                                                                        *join_product(attrs_prenum, (num,)),
+                                                                        *final_adds]
+
+
 __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיקה', ['אגף לוגיסטיקה', 'אגף טכנולוגיה ולוגיסטיקה', 'אט"ל'], 'logitech.png', {
     'technology': Group('חיל הטכנולוגיה והאחזקה', ['חיל החימוש', 'חיל טכנולוגיה ואחזקה', 'חיל הטנ"א', 'חיל טנ"א', 'חיל הטכנולוגיה', 'חיל טכנולוגיה'], 'technology.png', {
         'repair': Symbol('מרכז שיקום ואחזקה', ['מרכז השיקום והאחזקה', 'מש"א', 'מש"א 7000'], 'repair.png'),
@@ -325,7 +339,25 @@ unit_tags = Group('תגי יחידה', [], '', {
     'forces': Group('זרועות', [], 'forces.png', {
         'ground': Group('זרוע היבשה', [], 'ground.png', {
             'infantry': Group('חיל הרגלים', ['חיל רגלים', 'חי"ר'], 'infantry.png', {
-
+                'golani': Symbol(*infantry_combo('גולני', '1'), 'golani.png'),
+                'paratroopers': Symbol(*infantry_combo(('הצנחנים', 'צנחנים'), '35'), 'paratroopers.png'),
+                'givati': Symbol(*infantry_combo('גבעתי', '84'), 'givati.png'),
+                'oz': Symbol(*infantry_combo('עוז', '89'), 'oz.png'),
+                'kfir': Symbol(*infantry_combo('כפיר', '900'), 'kfir.png'),
+                'nahal': Symbol(*infantry_combo(('הנח"ל', 'נח"ל'), '933'), 'nahal.png'),
+                'carmeli': Symbol(*infantry_combo('כרמלי', '2'), 'carmeli.png'),
+                'alexandroni:': Symbol(*infantry_combo('אלכסנדרוני', '3'), 'kfir.png'),
+                'sharon': Symbol(*infantry_combo(('השרון', 'שרון'), '5', otzva=True), 'sharon.png'),
+                'etzioni': Symbol(*infantry_combo('עציוני', '6'), 'etzioni.png'),
+                'oded': Symbol(*infantry_combo('עודד', '9'), 'oded.png'),
+                'yiftach': Symbol(*infantry_combo('יפתח', '11'), 'yiftach.png'),
+                'negev': Symbol(*infantry_combo(('הנגב', 'נגב', 'סרגיי'), '12'), 'negev.png'),
+                'jerusalem': Symbol(*infantry_combo('ירושלים', '16'), 'jerusalem.png'),
+                'speartip': Symbol(*infantry_combo('חוד החנית', '55', otzva=True, final_adds=('המרכזית',)), 'speartip.png'),
+                'nesher': Symbol(*infantry_combo('נשר', '226', otzva=True, final_adds=('הצפונית',)), 'nesher.png'),
+                'alon': Symbol(*infantry_combo('אלון', '228', final_adds=('חטיבת הנח"ל הצפונית',)), 'alon.png'),
+                'firearrows': Symbol(*infantry_combo('חצי האש', '551', otzva=True), 'firearrows.png'),
+                'foxes': Symbol(*infantry_combo('שועלי מרום', '646', otzva=True, final_adds=('הדרומית',)), 'foxes.png')
             }),
             'armor': Group('חיל השריון', ['חיל שריון', 'חש"ן'], 'armor.png', {
 
@@ -341,7 +373,14 @@ unit_tags = Group('תגי יחידה', [], '', {
             }),
             'logistics': __logistics_unit_tags,
             'bazak': Symbol('עוצבת הבזק (אוגדה 99)', ['אוגדה 99', 'עוצבת הבזק', 'אוגדת הבזק', 'עוצבת בזק', 'עוצבת הבזק 99'], 'bazak.png'),
-            'marom': Symbol('מרכז הטסה והכשרות מיוחדות', ['מרו"ם', 'מרהו"ם', 'מרום פתרונות מבצעיים'], 'marom.png')
+            'marom': Symbol('מרכז הטסה והכשרות מיוחדות', ['מרו"ם', 'מרהו"ם', 'מרום פתרונות מבצעיים'], 'marom.png'),
+            'bahad1': Symbol('בית הספר לקצינים של צה"ל על שם חיים לסקוב (בה"ד 1)',
+                             ['בה"ד 1', 'בית הספר לקצינים', 'בית ספר לקצינים'], 'bahad1.png'),
+            'mali': Symbol('המרכז הלאומי לאימונים ביבשה 500',
+                           [*join_product(('מרכז לאומי לאימונים ביבשה', 'המרכז הלאומי לאימונים ביבשה',
+                                           'המרכז לאימונים ביבשה', 'מרכז לאימונים ביבשה', 'מל"י'), ('500', None)),
+                            'באלי"ש', 'בסיס אימון ליחידות שדה', 'מחנה שומרון', 'בסיס שומרון'], 'mali.png'),
+            'attack': Symbol('חטיבת התקיפה הרב-זרועית', ['חטיבת התקיפה הרב זרועית', 'חטיבת תקיפה רב זרועית'], 'attack.png')
         }),
         'air': Group('זרוע האוויר והחלל', ['חיל האוויר', 'חיל האוויר והחלל', 'זרוע האוויר'], 'air.gif', {
 
