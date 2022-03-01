@@ -57,7 +57,11 @@ class Group(Symbol):
     def __init__(self, name: str, alt_names: list[str], image_name: str, children: dict[str, Symbol], is_unit=True,
                  is_root=False):
         super().__init__(name, alt_names, image_name)
-        self.children = OrderedDict(children)
+        self.children = OrderedDict()
+        for folder, child in children.items():
+            self.children |= {folder: child}
+            if isinstance(child, Group) and not child.is_unit:
+                self.children |= child.children
         self.is_unit = is_unit
         self.is_root = is_root
         self.symbols = [*([] if is_root or not is_unit else [ParentSymbol(self)]), *self.children.values()]
@@ -347,7 +351,7 @@ unit_tags = Group('תגי יחידה', [], '', {
         })
     }, is_unit=False),
     'forces': Group('זרועות', [], 'forces.png', {
-        'ground': Group('זרוע היבשה', [], 'ground.png', {
+        'ground': Group('זרוע היבשה', [], 'ground_2.png', {
             'infantry': Group('חיל הרגלים', ['חיל רגלים', 'חי"ר'], 'infantry.png', {
                 'golani': Symbol(*ground_combo('גולני', '1'), 'golani.png'),
                 'paratroopers': Symbol(*ground_combo(('הצנחנים', 'צנחנים'), '35'), 'paratroopers.png'),
@@ -442,7 +446,7 @@ unit_tags = Group('תגי יחידה', [], '', {
                             'באלי"ש', 'בסיס אימון ליחידות שדה', 'מחנה שומרון', 'בסיס שומרון'], 'mali.png'),
             'attack': Symbol('חטיבת התקיפה הרב-זרועית', ['חטיבת התקיפה הרב זרועית', 'חטיבת תקיפה רב זרועית'], 'attack.png')
         }),
-        'air': Group('זרוע האוויר והחלל', ['חיל האוויר', 'חיל האוויר והחלל', 'זרוע האוויר'], 'air.gif', {
+        'air': Group('זרוע האוויר והחלל', ['חיל האוויר', 'חיל האוויר והחלל', 'זרוע האוויר'], 'air.png', {
 
         }),
         'navy': Group('זרוע הים', ['חיל הים'], 'navy.png', {
