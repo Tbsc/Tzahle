@@ -174,7 +174,7 @@ def oref_combo(*area_names: str) -> NameAndAlts:
     return f'{start} {area_names[0]}', join_product(('פיקוד העורף', 'פקע"ר'), ('מחוז', 'במחוז', None), area_names)
 
 
-def infantry_combo(names: StrOrTuple, num: str, otzva: bool = False, final_adds: TupleStrs = ()) -> NameAndAlts:
+def ground_combo(names: StrOrTuple, num: str, otzva: bool = False, final_adds: TupleStrs = ()) -> NameAndAlts:
     if otzva:
         attrs_prename = ('עוצבת', 'חטיבת')
         attrs_prenum = ('חטיבה', 'עוצבה')
@@ -318,7 +318,7 @@ unit_tags = Group('תגי יחידה', [], '', {
         'oref': Group('פיקוד העורף', ['פקע"ר'], 'oref.png', {
             'north': Symbol(*oref_combo('הצפון', 'צפון'), 'north.png'),
             'haifa': Symbol(*oref_combo('חיפה'), 'haifa.png'),
-            'center': Symbol(*oref_combo('ירושלים והמרכז', 'ירושלים ומרכז', 'מרכז', 'המרכז'), 'center.png'),
+            'center': Symbol(*oref_combo('ירושלים והמרכז', 'ירושלים ומרכז', 'מרכז', 'המרכז', 'ירושלים'), 'center.png'),
             'dan': Symbol(*oref_combo('דן'), 'dan.png'),
             'south': Symbol(*oref_combo('הדרום', 'דרום'), 'south.png'),
             'rescue': Symbol('חטיבת החילוץ וההדרכה',
@@ -339,28 +339,52 @@ unit_tags = Group('תגי יחידה', [], '', {
     'forces': Group('זרועות', [], 'forces.png', {
         'ground': Group('זרוע היבשה', [], 'ground.png', {
             'infantry': Group('חיל הרגלים', ['חיל רגלים', 'חי"ר'], 'infantry.png', {
-                'golani': Symbol(*infantry_combo('גולני', '1'), 'golani.png'),
-                'paratroopers': Symbol(*infantry_combo(('הצנחנים', 'צנחנים'), '35'), 'paratroopers.png'),
-                'givati': Symbol(*infantry_combo('גבעתי', '84'), 'givati.png'),
-                'oz': Symbol(*infantry_combo('עוז', '89'), 'oz.png'),
-                'kfir': Symbol(*infantry_combo('כפיר', '900'), 'kfir.png'),
-                'nahal': Symbol(*infantry_combo(('הנח"ל', 'נח"ל'), '933'), 'nahal.png'),
-                'carmeli': Symbol(*infantry_combo('כרמלי', '2'), 'carmeli.png'),
-                'alexandroni:': Symbol(*infantry_combo('אלכסנדרוני', '3'), 'kfir.png'),
-                'sharon': Symbol(*infantry_combo(('השרון', 'שרון'), '5', otzva=True), 'sharon.png'),
-                'etzioni': Symbol(*infantry_combo('עציוני', '6'), 'etzioni.png'),
-                'oded': Symbol(*infantry_combo('עודד', '9'), 'oded.png'),
-                'yiftach': Symbol(*infantry_combo('יפתח', '11'), 'yiftach.png'),
-                'negev': Symbol(*infantry_combo(('הנגב', 'נגב', 'סרגיי'), '12'), 'negev.png'),
-                'jerusalem': Symbol(*infantry_combo('ירושלים', '16'), 'jerusalem.png'),
-                'speartip': Symbol(*infantry_combo('חוד החנית', '55', otzva=True, final_adds=('המרכזית',)), 'speartip.png'),
-                'nesher': Symbol(*infantry_combo('נשר', '226', otzva=True, final_adds=('הצפונית',)), 'nesher.png'),
-                'alon': Symbol(*infantry_combo('אלון', '228', final_adds=('חטיבת הנח"ל הצפונית',)), 'alon.png'),
-                'firearrows': Symbol(*infantry_combo('חצי האש', '551', otzva=True), 'firearrows.png'),
-                'foxes': Symbol(*infantry_combo('שועלי מרום', '646', otzva=True, final_adds=('הדרומית',)), 'foxes.png')
+                'golani': Symbol(*ground_combo('גולני', '1'), 'golani.png'),
+                'paratroopers': Symbol(*ground_combo(('הצנחנים', 'צנחנים'), '35'), 'paratroopers.png'),
+                'givati': Symbol(*ground_combo('גבעתי', '84'), 'givati.png'),
+                'oz': Symbol(*ground_combo('עוז', '89'), 'oz.png'),
+                'kfir': Symbol(*ground_combo('כפיר', '900'), 'kfir.png'),
+                'nahal': Symbol(*ground_combo(('הנח"ל', 'נח"ל'), '933'), 'nahal.png'),
+                'carmeli': Symbol(*ground_combo('כרמלי', '2'), 'carmeli.png'),
+                'alexandroni:': Symbol(*ground_combo('אלכסנדרוני', '3'), 'kfir.png'),
+                'sharon': Symbol(*ground_combo(('השרון', 'שרון'), '5', otzva=True), 'sharon.png'),
+                'etzioni': Symbol(*ground_combo('עציוני', '6'), 'etzioni.png'),
+                'oded': Symbol(*ground_combo('עודד', '9'), 'oded.png'),
+                'yiftach': Symbol(*ground_combo('יפתח', '11'), 'yiftach.png'),
+                'negev': Symbol(*ground_combo(('הנגב', 'נגב', 'סרגיי'), '12'), 'negev.png'),
+                'jerusalem': Symbol(*ground_combo('ירושלים', '16'), 'jerusalem.png'),
+                'speartip': Symbol(*ground_combo('חוד החנית', '55', otzva=True, final_adds=('המרכזית',)), 'speartip.png'),
+                'nesher': Symbol(*ground_combo('נשר', '226', otzva=True, final_adds=('הצפונית',)), 'nesher.png'),
+                'alon': Symbol(*ground_combo('אלון', '228', final_adds=('חטיבת הנח"ל הצפונית',)), 'alon.png'),
+                'firearrows': Symbol(*ground_combo('חצי האש', '551', otzva=True), 'firearrows.png'),
+                'foxes': Symbol(*ground_combo('שועלי מרום', '646', otzva=True, final_adds=('הדרומית',)), 'foxes.png'),
+                'bedouin': Symbol('יחידת הסיור המדברי 585',
+                                  ['יחס"ר 585', 'היחס"ר הבדואי', 'סיירי המדבר', 'גדוד הסיור המדברי', 'סיור מדברי',
+                                   'יחידת סיור מדברי', 'גדוד סיור מדברי', 'יחס"ר בדואי', 'גדוד הסיור המדברי 585'],
+                                  'bedouin.png'),
+                'bislamah': Symbol('בית הספר למפקדי כיתות ומקצועות חיל הרגלים (חטיבה 828)',
+                                   ['ביסלמ"ח', 'חטיבה 828', 'בית הספר למפקדי כיתות ומקצועות חיל הרגלים',
+                                    'בית ספר למפקדי כיתות ומקצועות חיל הרגלים',
+                                    'בית ספר למפקדי כיתות ומקצועות חיל רגלים', 'בית ספר למפקדי כיתות',
+                                    'בית הספר למפקדי כיתות', 'בית הספר למ"כים ומקצועות החי"ר'],
+                                   'bislamah.png'),
+                'bahad8': Symbol('בית הספר לכושר קרבי (בה"ד 8)',
+                                 ['בה"ד 8', 'בית הספר לכושר קרבי', 'בית ספר לכושר קרבי'], 'bahad8.png')
             }),
             'armor': Group('חיל השריון', ['חיל שריון', 'חש"ן'], 'armor.png', {
-
+                'saar': Symbol(*ground_combo('סער מגולן', '7', otzva=True), 'saar.png'),
+                'barak': Symbol(*ground_combo('ברק', '188', otzva=True), 'barak.png'),
+                'iron': Symbol(*ground_combo('עקבות הברזל', '401', otzva=True), 'iron.png'),
+                'bneor': Symbol(*ground_combo('בני אור', '460', otzva=True, final_adds=(
+                    'ביסל"ש', 'בית הספר לשריון', 'בית ספר לשריון', 'שיזפון', 'בסיס שיזפון', 'מחנה שיזפון')),
+                                'bneor.png'),
+                'kiryati': Symbol(*ground_combo('קרייתי', '4'), 'kiryati.png'),
+                'zaken': Symbol(*ground_combo(('הזקן', 'זקן'), '8'), 'zaken.png'),
+                'harel': Symbol(*ground_combo('הראל', '10'), 'harel.png'),
+                'mahatz': Symbol(*ground_combo(('המחץ', 'מחץ'), '14'), 'mahatz.png'),
+                'reem': Symbol(*ground_combo('ראם', '179', otzva=True), 'reem.png'),
+                'ironfist': Symbol(*ground_combo('אגרוף הברזל', '205'), 'ironfist.png'),
+                'yiftach': Symbol(*ground_combo('יפתח', '434', otzva=True), 'yiftach.png')
             }),
             'engineering': Group('חיל ההנדסה הקרבית', ['חיל הנדסה קרבית', 'חיל הנדסה', 'חה"ן'], 'engineering.png', {
 
