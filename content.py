@@ -37,7 +37,7 @@ class Symbol:
     def __init__(self, name: str, alt_names: list[str], image_name: str):
         self.parent = None
         self.name = name
-        self.alt_names = [name, *alt_name_processor(alt_names)]
+        self.alt_names = {name, *alt_name_processor(alt_names)}  # A set because repeats are unwanted
         self.image_name = image_name
         self.is_unit = True
         self.is_root = False
@@ -81,8 +81,10 @@ class Group(Symbol):
 class ParentSymbol(Symbol):
     """Holds a group as a symbol."""
     def __init__(self, group: Group):
-        super().__init__(group.name, group.alt_names, group.image_name)
+        super().__init__(group.name, [], group.image_name)
         self.group = group
+        # Prevent processing alt_names again
+        self.alt_names = group.alt_names
 
 
 def as_singleton_tuple(var):
