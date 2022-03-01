@@ -141,7 +141,7 @@ def intelligence_combo(command: str) -> AltNames:
 
 def engineering_combo(command: str, unit_num: str) -> AltNames:
     return join_product(('מפקדת הנדסה', 'הנדסה', 'הנדסה קרבית', 'מפקדת הנדסה קרבית', 'חה"ן'), ('פיקוד', 'בפיקוד', None),
-                        (command, 'ה' + command), (unit_num, None))
+                        (command, 'ה' + command), (unit_num, None)) + [f'י"פ חה"ן {unit_num}']
 
 
 def ammunition_combo(command: str, num: str) -> NameAndAlts:
@@ -206,6 +206,9 @@ __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיק�
         'bahad10': Symbol('בית הספר לרפואה צבאית (בה"ד 10)',
                           ['בה"ד 10', 'בית הספר לרפואה צבאית', 'בי"ס לרפואה צבאית', 'בית ספר לרפואה צבאית',
                            'בית ספר לרפואה'], 'bahad10.png'),
+    }),
+    'weapons': Group('החטיבה הטכנולוגית ליבשה', ['חט"ל', 'חטיבה טכנולוגית ליבשה'], 'weapons.png', {
+        'yiftach': Symbol('יחידת יפת"ח', ['יפת"ח'], 'yiftach.png')
     }),
     'magal': Symbol('מערך מגל', ['מג"ל', 'מערך מג"ל'], 'magal.png'),
     'bahadim': Symbol('קריית ההדרכה על שם האלוף אריאל שרון',
@@ -315,7 +318,7 @@ unit_tags = Group('תגי יחידה', [], '', {
                                  'אגד 5004', 'אגד מרכז'],
                                 'logistics.png'),
             'segev': Symbol(*tikshuv_combo('שגב', num='372'), 'segev.png'),
-            'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד המרכז 802', ['י"פ חה"ן 802', *engineering_combo('מרכז', '802')], 'engineering.png')
+            'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד המרכז 802', engineering_combo('מרכז', '802'), 'engineering.png')
         }),
         'oref': Group('פיקוד העורף', ['פקע"ר'], 'oref.png', {
             'north': Symbol(*oref_combo('הצפון', 'צפון'), 'north.png'),
@@ -389,7 +392,17 @@ unit_tags = Group('תגי יחידה', [], '', {
                 'yiftach': Symbol(*ground_combo('יפתח', '434', otzva=True), 'yiftach.png')
             }),
             'engineering': Group('חיל ההנדסה הקרבית', ['חיל הנדסה קרבית', 'חיל הנדסה', 'חה"ן'], 'engineering.png', {
-
+                'asaf': Symbol('גדוד אסף 601', ['גדוד אסף', 'גדוד 601'], 'asaf.png'),
+                'lahav': Symbol('גדוד להב 603', ['גדוד להב', 'גדוד 603'], 'lahav.png'),
+                'mahatz': Symbol('גדוד המח"ץ 605', ['גדוד המח"ץ', 'גדוד 605'], 'mahatz.png'),
+                'yovel': Symbol('גדוד היובל 614', ['גדוד היובל', 'גדוד 614'], 'yovel.png'),
+                'raz': Symbol('גדוד רז 7107', ['גדוד רז', 'גדוד 7107'], 'raz.png'),
+                '710': Symbol('גדוד 710', [], '710.png'),
+                '8170': Symbol('גדוד 8170', [], '8170.png'),
+                'diamond': Symbol('יחידה הנדסית למשימות מיוחדות (יהל"ם)',
+                                  ['יהל"ם', 'יחידה הנדסית למשימות מיוחדות', 'יהלו"ם'], 'diamond.png'),
+                'bahad14': Symbol('בית הספר להנדסה צבאית (בה"ד 14)',
+                                  ['בה"ד 14', 'בית הספר להנדסה צבאית', 'בית ספר להנדסה צבאית', 'בהל"ץ'], 'bahad14.png')
             }),
             'artillery': Group('חיל התותחנים', ['חיל תותחנים', 'חת"ם'], 'artillery.png', {
 
