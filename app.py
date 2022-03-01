@@ -1,5 +1,6 @@
 import csv
 import os
+import re
 
 from flask import Flask, render_template, request, session
 import flask
@@ -60,7 +61,7 @@ def quiz():
         answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('units_dir', tag_path=tag_path),
                        'score': sess_score()}
 
-        guess = request.data.decode('utf-8').translate(content.no_punc_trans).strip()
+        guess = re.sub(r'\s+', ' ', request.data.decode('utf-8').translate(content.no_punc_trans).strip())
 
         if guess == 'giveup':
             return answer_dict
