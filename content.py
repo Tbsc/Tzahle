@@ -511,7 +511,7 @@ def join_path(base: str, folder: str, joiner: str = '/') -> str:
     return base + joiner + folder
 
 
-def find_path(tag: Symbol, joiner='/') -> str:
+def build_root_path(tag: Symbol, joiner='/') -> str:
     """Traverses the parent chain to create a string describing the path of the tag"""
     ret = ''
     parent: Group = tag.parent
@@ -521,16 +521,16 @@ def find_path(tag: Symbol, joiner='/') -> str:
     return ret
 
 
-def get_image_path(tag: Symbol, joiner='/') -> str:
-    return find_path(tag, joiner) + tag.image_name
+def build_image_path(tag: Symbol, joiner='/') -> str:
+    return build_root_path(tag, joiner) + tag.image_name
 
 
-def get_folder_path(tag: Symbol, joiner='/') -> str:
-    return find_path(tag, joiner) + tag.folder
+def build_full_path(tag: Symbol, joiner='/') -> str:
+    return build_root_path(tag, joiner) + tag.folder
 
 
-def get_full_image_path(tag: Symbol) -> str:
-    return url_for('static', filename='units/' + get_image_path(tag))
+def build_full_image_path(tag: Symbol) -> str:
+    return url_for('static', filename='units/' + build_image_path(tag))
 
 
 def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
@@ -558,7 +558,7 @@ def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
     return list(ret)
 
 
-def get_all_tags_path(path: str, joiner='/') -> list[Symbol]:
+def get_all_tags_in_path(path: str, joiner='/') -> list[Symbol]:
     """Recursively returns all unit tags in a group, specified by path"""
     return get_all_unit_tags(find_unit_tag(path, joiner))
 

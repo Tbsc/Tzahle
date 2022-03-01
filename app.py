@@ -46,12 +46,12 @@ def quiz():
     incorrect, the string "incorrect" is returned."""
     if request.method == 'GET':
         tag = display.quiz.random_tag()
-        sess_tag_path(content.get_folder_path(tag))
+        sess_tag_path(content.build_full_path(tag))
         return render_template('quiz.html',
                                c=content,
                                d=display.quiz,
                                tag=tag)
-    else:
+    else:  # POST
         tag_path = sess_tag_path()
         if tag_path is None:
             return 'bad path', 400

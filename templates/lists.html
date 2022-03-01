@@ -22,7 +22,7 @@ main {
     {% for tag in d.handle_web_request(q, r) %}
         <div class="unit_tag">
             {% set tag_link = d.build_href(tag, r) %}
-            <a href="{{ tag_link }}"><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}" id="{{ tag.folder }}"></a>
+            <a href="{{ tag_link }}"><img class="unit_tag_img" src="{{ c.build_full_image_path(tag) }}" id="{{ tag.folder }}"></a>
             <a href="{{ tag_link }}" style="text-decoration: none; color: inherit"><h5>{{ d.build_name(tag) }}</h5></a>
         </div>
     {% endfor %}

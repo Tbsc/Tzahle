@@ -38,7 +38,7 @@ main {
 
 {% block main %}
 <div class="unit_tag">
-    <a id="unit_tag_link"><img class="unit_tag_img" src="{{ c.get_full_image_path(tag) }}"></a>
+    <a id="unit_tag_link"><img class="unit_tag_img" src="{{ c.build_full_image_path(tag) }}"></a>
 </div>
 <form id="form-guess" autocomplete="off">
     <input id="input-guess" type="search" value="" required autofocus>
