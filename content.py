@@ -190,6 +190,11 @@ def ground_combo(names: StrOrTuple, num: str, otzva: bool = False, final_adds: T
                                                                         *final_adds]
 
 
+def artillery_combo(full_name: str, num: str, attrs_prenum: StrOrTuple = (), final_adds: TupleStrs = ()) -> NameAndAlts:
+    attrs_prenum = (*as_singleton_tuple(attrs_prenum), 'אגד', 'אגד ארטילרי')
+    return f'{full_name} ({attrs_prenum[0]} {num})', [*(f'{attr} {num}' for attr in attrs_prenum), full_name, *final_adds]
+
+
 __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיקה', ['אגף לוגיסטיקה', 'אגף טכנולוגיה ולוגיסטיקה', 'אט"ל'], 'logitech.png', {
     'technology': Group('חיל הטכנולוגיה והאחזקה', ['חיל החימוש', 'חיל טכנולוגיה ואחזקה', 'חיל הטנ"א', 'חיל טנ"א', 'חיל הטכנולוגיה', 'חיל טכנולוגיה'], 'technology.png', {
         'repair': Symbol('מרכז שיקום ואחזקה', ['מרכז השיקום והאחזקה', 'מש"א', 'מש"א 7000'], 'repair.png'),
@@ -405,7 +410,20 @@ unit_tags = Group('תגי יחידה', [], '', {
                                   ['בה"ד 14', 'בית הספר להנדסה צבאית', 'בית ספר להנדסה צבאית', 'בהל"ץ'], 'bahad14.png')
             }),
             'artillery': Group('חיל התותחנים', ['חיל תותחנים', 'חת"ם'], 'artillery.png', {
-
+                'golan': Symbol(*artillery_combo('עוצבת גולן', '282', 'חטיבת האש'), 'golan.png'),
+                'pillar': Symbol(*artillery_combo('עוצבת עמוד האש', '215', 'חטיבת האש'), 'pillar.png'),
+                'sling': Symbol(*artillery_combo('עוצבת קלע דוד', '214', 'חטיבת אש מיוחדת'), 'sling.png'),
+                'flame': Symbol(*artillery_combo('עוצבת שלהבת האש', '425', final_adds=(
+                    'בית הספר לתותחנות וסיוע אש ביבשה', 'ביסל"ת', 'בה"ד 9', 'מחנה שבטה', 'מחנה שיבטה', 'שיבטה',
+                    'שבטה', 'בית הספר לתותחנות', 'בית ספר לתותחנות')), 'flame.png'),
+                'kidon': Symbol(*artillery_combo('עוצבת כידון', '209'), 'kidon.png'),
+                'tavor': Symbol(*artillery_combo('עוצבת התבור', '454'), 'tavor.png'),
+                'tkuma': Symbol(*artillery_combo('עוצבת התקומה', '213', 'חטיבת האש'), 'tkuma.png'),
+                'adirim': Symbol(*artillery_combo('עוצבת אדירים', '7338'), 'adirim.png'),
+                'zik': Symbol('יחידת זיק ירוק (יחידה 5252)',
+                              ['יחידת זיק ירוק', 'יחידה 5252', 'יחידת זיק ירוק 5252', 'יחידת זיק', 'זיק', 'זיק ירוק',
+                               'זיק 5252'], 'zik.png'),
+                'hatam': Symbol('מרכז חת"ם', ['מרכז חיל התותחנים', 'מרכז חיל תותחנים'], 'hatam.png')
             }),
             'borders': Group('חיל הגנת הגבולות', ['חיל הגנת גבולות'], 'borders.png', {
 
