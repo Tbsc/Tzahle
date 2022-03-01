@@ -360,7 +360,7 @@ unit_tags = Group('תגי יחידה', [], '', {
                 'kfir': Symbol(*ground_combo('כפיר', '900'), 'kfir.png'),
                 'nahal': Symbol(*ground_combo(('הנח"ל', 'נח"ל'), '933'), 'nahal.png'),
                 'carmeli': Symbol(*ground_combo('כרמלי', '2'), 'carmeli.png'),
-                'alexandroni:': Symbol(*ground_combo('אלכסנדרוני', '3'), 'kfir.png'),
+                'alexandroni': Symbol(*ground_combo('אלכסנדרוני', '3'), 'kfir.png'),
                 'sharon': Symbol(*ground_combo(('השרון', 'שרון'), '5', otzva=True), 'sharon.png'),
                 'etzioni': Symbol(*ground_combo('עציוני', '6'), 'etzioni.png'),
                 'oded': Symbol(*ground_combo('עודד', '9'), 'oded.png'),
