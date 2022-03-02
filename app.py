@@ -1,4 +1,5 @@
 import csv
+import datetime
 import os
 import re
 
@@ -7,6 +8,7 @@ import flask
 import content
 import display.lists
 import display.quiz
+import display.tzahle
 
 
 app = Flask(__name__)
@@ -32,6 +34,27 @@ def units_dir(tag_path=''):
                            d=display.lists,
                            q=tag_path,
                            r='r' in request.args)
+
+
+@app.route('/tzahle', methods=['GET', 'POST'])
+def tzahle():
+    if request.method == 'GET':
+        return render_template('tzahle.html', c=content, d=display.tzahle)
+    else:
+        # POST is the player sending guesses
+        return 'not functional yet'
+
+
+@app.route('/tzahle/offset', methods=['POST'])
+def tzahle_offset():
+    try:
+        offset = int(request.data)
+    except ValueError:
+        return 'invalid offset', 400
+    player_time = datetime.datetime.utcnow() - datetime.timedelta(minutes=offset)
+    tag, day_no = display.tzahle.get_tag_of_day(player_time.date())
+    session['day_no'] = day_no
+    return content.build_full_image_path(tag)
 
 
 @app.route('/quiz', methods=['GET', 'POST'])

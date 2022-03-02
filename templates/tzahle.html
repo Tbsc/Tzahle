@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Tzahle Quiz{% endblock %}
+
+{% block head %}
+<style>
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.start-hidden {
+    display: none
+}
+
+#input-guess {
+    /* I've been told this stops Safari on iPhone zooming into the input box when selected? */
+    font-size: 16px;
+    color: initial;
+}
+
+#keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.key-row {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.key {
+    padding: 9px;
+    margin: 3px;
+    border: 1px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.space-row {
+    align-self: stretch;
+}
+
+.space-key {
+    width: 100%;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+<h1>צָהֶ"ל</h1>
+{% endblock %}
+
+{% block main %}
+<div class="unit_tag">
+    <a id="unit_tag_link"><img class="unit_tag_img" id="unit_tag_img"></a>
+</div>
+<form id="form-guess" autocomplete="off">
+    <input id="input-guess" type="search" value="" disabled required autofocus>
+</form>
+<div id="guess-message" class="start-hidden"></div>
+<div id="guess-answer" class="start-hidden"></div>
+<div id="keyboard">
+    <div class="key-row">
+        <div class="key">0</div>
+        <div class="key">9</div>
+        <div class="key">8</div>
+        <div class="key">7</div>
+        <div class="key">6</div>
+        <div class="key">5</div>
+        <div class="key">4</div>
+        <div class="key">3</div>
+        <div class="key">2</div>
+        <div class="key">1</div>
+    </div>
+    <div class="key-row">
+        <div class="key backspace-key">→</div>
+        <div class="key">פ</div>
+        <div class="key">ם</div>
+        <div class="key">ן</div>
+        <div class="key">ו</div>
+        <div class="key">ט</div>
+        <div class="key">א</div>
+        <div class="key">ר</div>
+        <div class="key">ק</div>
+    </div>
+    <div class="key-row">
+        <div class="key">ף</div>
+        <div class="key">ך</div>
+        <div class="key">ל</div>
+        <div class="key">ח</div>
+        <div class="key">י</div>
+        <div class="key">ע</div>
+        <div class="key">כ</div>
+        <div class="key">ג</div>
+        <div class="key">ד</div>
+        <div class="key">ש</div>
+    </div>
+    <div class="key-row">
+        <div class="key">ץ</div>
+        <div class="key">ת</div>
+        <div class="key">צ</div>
+        <div class="key">מ</div>
+        <div class="key">נ</div>
+        <div class="key">ה</div>
+        <div class="key">ב</div>
+        <div class="key">ס</div>
+        <div class="key">ז</div>
+        <div class="key submit-key" id="guess">שלח</div>
+    </div>
+    <div class="key-row space-row">
+        <div class="key space-key" data-append=" ">␣</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='tzahle.js') }}"></script>
+{% endblock %}
