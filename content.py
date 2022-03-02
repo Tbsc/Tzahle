@@ -264,6 +264,38 @@ unit_tags = Group('תגי יחידה', [], '', {
             'ayalim': Symbol(*tikshuv_combo('איילים'), 'ayalim.png'),
             'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד הצפון 801', engineering_combo('צפון', '801'), 'engineering.png')
         }),
+        'center': Group('פיקוד המרכז', ['פיקוד מרכז', 'פקמ"ז'], 'center.png', {
+            'ayosh': Group('אוגדת איו"ש (אוגדה 877)', ['אוגדת איו"ש', 'אוגדה 877', 'אוגדת יו"ש', 'אוגדת יהודה ושומרון',
+                                                       'אוגדת אזור יהודה ושומרון'], 'ayosh.png', {
+                'menashe': Symbol(*ayosh_hatmar_combo('מנשה'), 'menashe.png'),
+                'efraim': Symbol(*ayosh_hatmar_combo('אפרים', 'אפריים'), 'efraim.png'),
+                'shomron': Symbol(*ayosh_hatmar_combo('שומרון'), 'shomron.png'),
+                'binyamin': Symbol(*ayosh_hatmar_combo('בנימין'), 'binyamin.png'),
+                'yehuda': Symbol(*ayosh_hatmar_combo('יהודה'), 'yehuda.png'),
+                'etzion': Symbol(*ayosh_hatmar_combo('עציון'), 'etzion.png'),
+                'nitzan': Symbol('גדוד איסוף ניצן 636', isuf_combo('ניצן', '636'), 'nitzan.png'),
+                'ofek': Symbol(*tikshuv_combo('אופק'), 'ofek.png')
+            }),
+            'fire': Group('עוצבת האש (אוגדה 98)', ['עוצבת האש', 'אוגדה 98', 'עוצבת האש 98', 'אוגדת האש'], 'fire.png', {
+                'lapid': Symbol(*tikshuv_combo('לפיד', num='492'), 'lapid.png'),
+                'logistics': Symbol('יחידת שקנאי (אגד לוגיסטי עוצבת האש)',
+                                    ['אגד לוגיסטי האש', 'יחידת שקנאי', 'אגד לוגיסטי עוצבת האש', 'אלו"ג שקנאי',
+                                     'אלו"ג האש', 'אלו"ג עוצבת האש', 'אגד לוגיסטי שקנאי'], 'logistics.png')
+            }),
+            'bika': Symbol(*hatmar_combo(('הבקעה והעמקים', 'הבקעה'), '417'), 'bika.png'),
+            'health': Symbol('יחידת הרפואה בפיקוד המרכז', health_combo('מרכז'), 'health.png'),
+            'lachish': Symbol('בסיס אימונים פיקודי לכיש',
+                              ['בסיס אימונים פיקודי מרכז', 'בא"פ לכיש', 'בא"פ מרכז', 'בסיס לכיש', 'בסיס אימונים מרכז',
+                               'בסיס אימונים לכיש'], 'lachish.png'),
+            'ammunition': Symbol(*ammunition_combo('מרכז', '650'), 'ammunition.png'),
+            'intelligence': Symbol('מחלקת המודיעין בפיקוד המרכז', intelligence_combo('מרכז'), 'intelligence.png'),
+            'logistics': Symbol('אגד לוגיסטי מרחבי 5004',
+                                ['אלמ"ר 5004', 'אגד לוגיסטי מרחבי מרכז', 'אגד לוגיסטי 5004', 'אגד לוגיסטי מרכז',
+                                 'אגד 5004', 'אגד מרכז'],
+                                'logistics.png'),
+            'segev': Symbol(*tikshuv_combo('שגב', num='372'), 'segev.png'),
+            'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד המרכז 802', engineering_combo('מרכז', '802'), 'engineering.png')
+        }),
         'south': Group('פיקוד הדרום', ['פיקוד דרום', 'פד"ם'], 'south.png', {
             'gaza': Group('עוצבת שועלי האש (אוגדה 143)', ['אוגדת עזה', 'עוצבת שועלי האש', 'אוגדה 143', 'עוצבת שועלי האש 143', 'אוגדת עזה 143'], 'gaza.png', {
                 'geffen': Symbol('חטיבת הגפן', ['חטיבת גפן', 'החטיבה הצפונית', 'החטיבה הצפונית ברצועת עזה', 'חטמ"ר צפונית', 'חטיבה צפונית'], 'geffen.png'),
@@ -296,38 +328,6 @@ unit_tags = Group('תגי יחידה', [], '', {
                                 'logistics.png'),
             'raam': Symbol(*tikshuv_combo('רעם'), 'raam.png'),
             'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד הדרום 803', engineering_combo('דרום', '803'), 'engineering.png')
-        }),
-        'center': Group('פיקוד המרכז', ['פיקוד מרכז', 'פקמ"ז'], 'center.png', {
-            'ayosh': Group('אוגדת איו"ש (אוגדה 877)', ['אוגדת איו"ש', 'אוגדה 877', 'אוגדת יו"ש', 'אוגדת יהודה ושומרון',
-                                                       'אוגדת אזור יהודה ושומרון'], 'ayosh.png', {
-                'menashe': Symbol(*ayosh_hatmar_combo('מנשה'), 'menashe.png'),
-                'efraim': Symbol(*ayosh_hatmar_combo('אפרים', 'אפריים'), 'efraim.png'),
-                'shomron': Symbol(*ayosh_hatmar_combo('שומרון'), 'shomron.png'),
-                'binyamin': Symbol(*ayosh_hatmar_combo('בנימין'), 'binyamin.png'),
-                'yehuda': Symbol(*ayosh_hatmar_combo('יהודה'), 'yehuda.png'),
-                'etzion': Symbol(*ayosh_hatmar_combo('עציון'), 'etzion.png'),
-                'nitzan': Symbol('גדוד איסוף ניצן 636', isuf_combo('ניצן', '636'), 'nitzan.png'),
-                'ofek': Symbol(*tikshuv_combo('אופק'), 'ofek.png')
-            }),
-            'fire': Group('עוצבת האש (אוגדה 98)', ['עוצבת האש', 'אוגדה 98', 'עוצבת האש 98', 'אוגדת האש'], 'fire.png', {
-                'lapid': Symbol(*tikshuv_combo('לפיד', num='492'), 'lapid.png'),
-                'logistics': Symbol('יחידת שקנאי (אגד לוגיסטי עוצבת האש)',
-                                    ['אגד לוגיסטי האש', 'יחידת שקנאי', 'אגד לוגיסטי עוצבת האש', 'אלו"ג שקנאי',
-                                     'אלו"ג האש', 'אלו"ג עוצבת האש', 'אגד לוגיסטי שקנאי'], 'logistics.png')
-            }),
-            'bika': Symbol(*hatmar_combo(('הבקעה והעמקים', 'הבקעה'), '417'), 'bika.png'),
-            'health': Symbol('יחידת הרפואה בפיקוד המרכז', health_combo('מרכז'), 'health.png'),
-            'lachish': Symbol('בסיס אימונים פיקודי לכיש',
-                              ['בסיס אימונים פיקודי מרכז', 'בא"פ לכיש', 'בא"פ מרכז', 'בסיס לכיש', 'בסיס אימונים מרכז',
-                               'בסיס אימונים לכיש'], 'lachish.png'),
-            'ammunition': Symbol(*ammunition_combo('מרכז', '650'), 'ammunition.png'),
-            'intelligence': Symbol('מחלקת המודיעין בפיקוד המרכז', intelligence_combo('מרכז'), 'intelligence.png'),
-            'logistics': Symbol('אגד לוגיסטי מרחבי 5004',
-                                ['אלמ"ר 5004', 'אגד לוגיסטי מרחבי מרכז', 'אגד לוגיסטי 5004', 'אגד לוגיסטי מרכז',
-                                 'אגד 5004', 'אגד מרכז'],
-                                'logistics.png'),
-            'segev': Symbol(*tikshuv_combo('שגב', num='372'), 'segev.png'),
-            'engineering': Symbol('מפקדת הנדסה קרבית בפיקוד המרכז 802', engineering_combo('מרכז', '802'), 'engineering.png')
         }),
         'oref': Group('פיקוד העורף', ['פקע"ר'], 'oref.png', {
             'north': Symbol(*oref_combo('הצפון', 'צפון'), 'north.png'),
