@@ -18,11 +18,12 @@ body {
 
 main {
     display: flex;
-    flex-direction: column;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    flex: 1;
 }
 
 #header-container {
@@ -55,6 +56,15 @@ main {
     /* I've been told this stops Safari on iPhone zooming into the input box when selected? */
     font-size: 16px;
     color: initial;
+}
+
+#filler {
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+footer {
+    margin-bottom: 5px
 }
 
 #keyboard {
@@ -103,6 +113,7 @@ main {
 <form id="form-guess" autocomplete="off">
     <input id="input-guess" type="search" value="" disabled required autofocus>
 </form>
+<div id="filler"></div>
 <div id="guess-message" class="start-hidden"></div>
 <div id="guess-answer" class="start-hidden"></div>
 <div id="keyboard">
