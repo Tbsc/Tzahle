@@ -75,7 +75,6 @@ $(() => {
     }
 
     $("body").bind("keydown", (event) => {
-        event.preventDefault()
         if (event.code === "Enter") {
 
         } else if (event.code === "Backspace") {
