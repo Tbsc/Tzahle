@@ -4,6 +4,18 @@
 
 {% block head %}
 <style>
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -13,8 +25,30 @@ main {
     margin-bottom: 20px;
 }
 
-.start-hidden {
-    display: none
+#header-container {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#header-left, #header-right {
+    flex: 1;
+    margin: 12px;
+}
+
+#header-left {
+    text-align: left;
+}
+
+#header-right {
+    text-align: right;
+    font-size: 12px;
+    display: flex;
+    flex-flow: row;
+    justify-content: start;
+    align-items: center;
+    gap: 6px;
 }
 
 #input-guess {
@@ -38,7 +72,7 @@ main {
 .key {
     padding: 9px;
     margin: 3px;
-    border: 1px solid black;
+    border: 1px solid var(--color-foreground);
     border-radius: 4px;
     cursor: pointer;
 }
@@ -55,7 +89,11 @@ main {
 {% endblock %}
 
 {% block header %}
-<h1>צָהֶ"ל</h1>
+<div id="header-container">
+    <div id="header-right"><input type="checkbox" id="toggle-dark"><label for="toggle-dark">מצב<br>לילה</label></div>
+    <div id="header-title"><h1>צָהֶ"ל</h1></div>
+    <div id="header-left"></div>
+</div>
 {% endblock %}
 
 {% block main %}
@@ -122,5 +160,6 @@ main {
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='dark.js') }}"></script>
 <script src="{{ url_for('static', filename='tzahle.js') }}"></script>
 {% endblock %}

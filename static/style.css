@@ -1,6 +1,17 @@
-html {
+body {
+    --color-background: aliceblue;
+    --color-foreground: black;
+}
+
+body.dark-theme {
+    --color-background: #1f1f1f;
+    --color-foreground: white;
+}
+
+body {
     font-family: sans-serif;
-    background-color: aliceblue;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     direction: rtl;
     font-size: 1em;
 }
@@ -40,4 +51,8 @@ footer {
 
 textarea {
     resize: none;
+}
+
+.start-hidden {
+    display: none
 }
