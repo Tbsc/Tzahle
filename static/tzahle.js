@@ -42,6 +42,7 @@ $(() => {
         "KeyT": "א",
         "KeyR": "ר",
         "KeyE": "ק",
+        "Quote": '"',
         "Semicolon": "ף",
         "KeyL": "ך",
         "KeyK": "ל",
@@ -80,6 +81,9 @@ $(() => {
         } else if (event.code === "Backspace") {
             backspaceInput()
         } else if (keyConv[event.code] !== undefined) {
+            if (event.code === "Quote") {
+                event.preventDefault()
+            }
             appendToInput(keyConv[event.code])
         }
     })
