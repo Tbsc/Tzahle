@@ -52,12 +52,20 @@ class Symbol:
     def __reversed__(self):
         yield self
 
+    def __eq__(self, other):
+        # Handles root group edge case, since as a parent None is used instead of the root group object
+        if self is None:
+            return other is None or other.is_root
+        if other is None:
+            return self is None or self.is_root
+        return self is other
+
 
 class Group(Symbol):
     def __init__(self, name: str, alt_names: list[str], image_name: str, children: dict[str, Symbol], is_unit=True,
                  is_root=False):
         super().__init__(name, alt_names, image_name)
-        self.children = OrderedDict()
+        self.children = {}
         for folder, child in children.items():
             self.children |= {folder: child}
             if isinstance(child, Group) and not child.is_unit:
@@ -70,7 +78,7 @@ class Group(Symbol):
             if child.parent is None and not is_root:
                 child.parent = self
             # Supply all group children's ParentSymbol with its information
-            if isinstance(child, Group) and isinstance(child.symbols[0], ParentSymbol):
+            if isinstance(child, Group) and len(child.symbols) > 0 and isinstance(child.symbols[0], ParentSymbol):
                 child.symbols[0].folder = child.folder
                 child.symbols[0].parent = self if not is_root else None
         self.is_group = True
@@ -601,6 +609,10 @@ def get_all_unit_tags(group=unit_tags) -> list[Symbol]:
     # extendleft reverses the given iterable when appending, so a reverse to undo that
     ret = deque()
     for child in reversed(group.children.values()):
+        # The group builder adds grandchildren whose parent is not a unit to the grandparent
+        # This means duplicate symbols when recursing! Add this check to make sure we add only direct children
+        if child.parent != group:
+            continue
         # Append only the end symbols, the group itself is added later outside the loop through the recursion
         if isinstance(child, Group):
             ret.extendleft(reversed(get_all_unit_tags(child)))
