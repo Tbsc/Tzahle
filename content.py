@@ -203,8 +203,14 @@ def artillery_combo(name: str, num: str, attrs_prenum: StrOrTuple = (), final_ad
     return f'{otzvat} {name} ({attrs_prenum[0]} {num})', [*(f'{attr} {num}' for attr in attrs_prenum), name, f'{otzvat} {name}', *final_adds]
 
 
-def police_combo(command: str):
-    return f'המשטרה הצבאית בפיקוד ה{command}', join_product(('מ"ץ', 'משטרה צבאית', 'המשטרה הצבאית'), ('פיקוד', 'בפיקוד', None), (command, 'ה' + command))
+def police_combo(command: str, num: str):
+    return f'יחידה פיקודית משטרה צבאית {command} {num}', join_product(('מ"ץ', 'משטרה צבאית', 'המשטרה הצבאית',
+                                                                       'יחידה פיקודית משטרה צבאית',
+                                                                       'יחידה פיקודית במשטרה הצבאית',
+                                                                       'יחידה פיקודית המשטרה הצבאית', 'י"ף חמ"ץ',
+                                                                       'יחידה פיקודית מ"ץ', 'י"ף משטרה צבאית'),
+                                                                      ('פיקוד', 'בפיקוד', None),
+                                                                      (command, 'ה' + command), (num, None))
 
 
 __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיקה', ['אגף לוגיסטיקה', 'אגף טכנולוגיה ולוגיסטיקה', 'אט"ל'], 'logitech.png', {
@@ -472,8 +478,17 @@ unit_tags = Group('תגי יחידה', [], '', {
     'sections': Group('אגפים', [], 'sections.png', {
         'personnel': Group('אגף כוח האדם', ['אגף כוח אדם', 'אכ"א', 'כוח אדם'], 'personnel.png', {
             'meitav': Symbol('מיטב', ['מיט"ב', 'בקו"ם', 'יחידת מיט"ב'], 'meitav.png'),
-            'police': Group('חיל המשטרה הצבאית', ['משטרה צבאית', 'חיל משטרה צבאית', 'מ"ץ'], 'police.png', {
-
+            'police': Group('חיל המשטרה הצבאית', ['משטרה צבאית', 'חיל משטרה צבאית', 'מ"ץ', 'חמ"ץ'], 'police.png', {
+                'north': Symbol(*police_combo('צפון', '390'), 'north.png'),
+                'center': Symbol(*police_combo('מרכז', '391'), 'center.png'),
+                'south': Symbol(*police_combo('דרום', '392'), 'south.png'),
+                'staff': Symbol('יחידת משטרה צבאית המטה הכללי', join_product(
+                    ('יחידת משטרה צבאית', 'יחידת המשטרה הצבאית', 'משטרה צבאית', 'המשטרה הצבאית', 'מ"ץ'),
+                    ('המטה הכללי', 'מטה כללי', 'מטכ"ל')), 'staff.png'),
+                'bahad13': Symbol('בית הספר למשטרה צבאית (בה"ד 13)',
+                                  ['בה"ד 13', 'בית הספר למשטרה צבאית', 'בית ספר למשטרה צבאית'], 'bahad13.png'),
+                'metzah': Symbol('משטרה צבאית חוקרת', ['מצ"ח', 'המשטרה הצבאית החוקרת'], 'metzah.png'),
+                'passes': Symbol('המשטרה הצבאית גדודי מעבר ארז ותעוז', [], 'passes.png')
             }),
             'adjutant': Symbol('חיל משאבי האנוש', ['חיל משאבי אנוש', 'משא"ן', 'משאבי אנוש', 'משאבי האנוש'], 'adjutant.png'),
             'education': Symbol('חיל החינוך והנוער', ['חיל חינוך ונוער', 'חיל חינוך', 'חינוך', 'חינוך ונוער'], 'education.png'),
