@@ -26,32 +26,6 @@ main {
     flex: 1;
 }
 
-#header-container {
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#header-left, #header-right {
-    flex: 1;
-    margin: 12px;
-}
-
-#header-left {
-    text-align: left;
-}
-
-#header-right {
-    text-align: right;
-    font-size: 12px;
-    display: flex;
-    flex-flow: row;
-    justify-content: start;
-    align-items: center;
-    gap: 6px;
-}
-
 #input-guess {
     /* I've been told this stops Safari on iPhone zooming into the input box when selected? */
     font-size: 16px;
@@ -111,11 +85,7 @@ footer {
 {% endblock %}
 
 {% block header %}
-<div id="header-container">
-    <div id="header-right"><input type="checkbox" id="toggle-dark"><label for="toggle-dark">מצב<br>לילה</label></div>
-    <div id="header-title"><h1>צָהֶ"ל</h1></div>
-    <div id="header-left"></div>
-</div>
+<h1>צָהֶ"ל</h1>
 {% endblock %}
 
 {% block main %}
@@ -184,6 +154,5 @@ footer {
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='dark.js') }}"></script>
 <script src="{{ url_for('static', filename='tzahle.js') }}"></script>
 {% endblock %}

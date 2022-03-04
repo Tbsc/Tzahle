@@ -10,7 +10,12 @@
 </head>
 <body>
 <header>
-    {% block header %}{% endblock %}
+    <div id="header-container">
+        <div id="header-right"><input type="checkbox" id="toggle-dark"><label for="toggle-dark">מצב<br>לילה</label></div>
+        <div id="header-title">{% block header %}{% endblock %}</div>
+        <div id="header-left">{% block header_left %}{% endblock %}</div>
+    </div>
+</div>
 </header>
 <main>
     {% block main %} {% endblock %}
@@ -20,6 +25,7 @@
     {% block footer %}{% endblock %}
 </footer>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='dark.js') }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
