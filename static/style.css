@@ -1,23 +1,17 @@
 body {
     --color-background: aliceblue;
     --color-foreground: black;
+    --link-color: #0066cc;
 }
 
 body.dark-theme {
     --color-background: #1f1f1f;
     --color-foreground: #e5e5e5;
+    --link-color: dodgerblue;
 }
 
 body.dark-theme img {
     filter: brightness(90%);
-}
-
-body.dark-theme a:not(:visited) {
-    color: dodgerblue;
-}
-
-body.dark-theme a:visited {
-    color: mediumpurple;
 }
 
 body {
