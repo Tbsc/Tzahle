@@ -68,6 +68,7 @@ header {
 footer {
     text-align: center;
     font-size: calc(1rem - 0.3vw);
+    margin-bottom: 4px;
 }
 
 @media (max-width: 960px) {

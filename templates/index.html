@@ -9,7 +9,11 @@ main {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
+}
+
+a {
+    text-decoration: none;
 }
 </style>
 {% endblock %}
@@ -24,5 +28,8 @@ main {
 </div>
 <div>
     <a href="{{ url_for('quiz') }}"><h2>חידון</h2></a>
+</div>
+<div>
+    <a href="{{ url_for('tzahle') }}"><h2>צָהֶ"ל</h2></a>
 </div>
 {% endblock %}
