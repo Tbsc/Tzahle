@@ -5,11 +5,19 @@ body {
 
 body.dark-theme {
     --color-background: #1f1f1f;
-    --color-foreground: white;
+    --color-foreground: #e5e5e5;
 }
 
 body.dark-theme img {
     filter: brightness(90%);
+}
+
+body.dark-theme a:not(:visited) {
+    color: dodgerblue;
+}
+
+body.dark-theme a:visited {
+    color: mediumpurple;
 }
 
 body {
@@ -18,6 +26,8 @@ body {
     color: var(--color-foreground);
     direction: rtl;
     font-size: 1em;
+    margin: 0;
+    overflow-x: hidden;
 }
 
 #header-container {
