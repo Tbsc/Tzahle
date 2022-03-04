@@ -28,7 +28,7 @@ $(() => {
         } else if (classes.contains("submit-key")) {
             // Do something
         } else {
-            let toAppend = event.target.hasAttribute("data-append") ? event.target.getAttribute("data-append") : event.target.textContent
+            let toAppend = event.target.getAttribute("data-append") ?? event.target.textContent
             appendToInput(toAppend)
         }
     })

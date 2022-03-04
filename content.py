@@ -221,6 +221,14 @@ def police_combo(command: str, num: str):
                                                                       (command, 'ה' + command), (num, None))
 
 
+def squadron_combo(names: StrOrTuple, num: str):
+    names = as_singleton_tuple(names)
+    squadron = 'טייסת'
+    return f'{squadron} {names[0]} ({squadron} {num})', reduce(
+        lambda x, name: x + [f'{squadron} {name}', f'{squadron} {name} {num}', f'{name} {num}', name],
+        ([f'{squadron} {num}'], *names))
+
+
 __logistics_unit_tags = Group('אגף הטכנולוגיה והלוגיסטיקה', ['אגף לוגיסטיקה', 'אגף טכנולוגיה ולוגיסטיקה', 'אט"ל'], 'logitech.png', {
     'technology': Group('חיל הטכנולוגיה והאחזקה', ['חיל החימוש', 'חיל טכנולוגיה ואחזקה', 'חיל הטנ"א', 'חיל טנ"א', 'חיל הטכנולוגיה', 'חיל טכנולוגיה'], 'technology.png', {
         'repair': Symbol('מרכז שיקום ואחזקה', ['מרכז השיקום והאחזקה', 'מש"א', 'מש"א 7000'], 'repair.png'),
@@ -477,8 +485,146 @@ unit_tags = Group('תגי יחידה', [], '', {
                             'באלי"ש', 'בסיס אימון ליחידות שדה', 'מחנה שומרון', 'בסיס שומרון'], 'mali.png'),
             'attack': Symbol('חטיבת התקיפה הרב-זרועית', ['חטיבת התקיפה הרב זרועית', 'חטיבת תקיפה רב זרועית'], 'attack.png')
         }),
-        'air': Group('זרוע האוויר והחלל', ['חיל האוויר', 'חיל האוויר והחלל', 'זרוע האוויר'], 'air.png', {
-
+        'air': Group('זרוע האוויר והחלל', ['חיל האוויר', 'חיל האוויר והחלל', 'זרוע האוויר', 'אוויר'], 'air.png', {
+            'staff': Group('להק ראש המטה', ['למ"ט', 'להק ראש מטה', 'מטה'], 'staff.png', {}, is_unit=False),
+            'generic': Symbol('תג יחידה כללי בחיל האוויר', ['חיל האוויר', 'זרוע האוויר', 'תג כללי', 'תג כללי חיל האוויר'], 'generic.png'),
+            'air': Group('להק האוויר', ['לה"א', 'להק אוויר'], '', {}, is_unit=False),
+            'operations': Group('להק מבצעי אוויר', ['מבצעי אוויר'], 'operations.png', {
+                'control': Symbol('יחידת השליטה והמבצעים', ['יש"ם קרב 333', 'יחידת שליטה ומבצעים'], 'control.png'),
+                'special': Group('כנף 7 (כנף כוחות האוויר המיוחדים)',
+                                 ['כנף 7', 'כנף כוחות האוויר המיוחדים', 'כוחות האוויר המיוחדים', 'כוחות אוויר מיוחדים',
+                                  'מכא"ם', 'מפקדת כוחות האוויר המיוחדים'], 'special.png', {
+                    'yahak': Symbol('יחידת הנחתה קדמית (יה"ק 5700)',
+                                    ['יחידת הנחתה קדמית', 'יה"ק 5700', 'יחידת ההנחתה הקדמית',
+                                     'יחידת הנחתה קדמית 5700', 'יחידת ההנחתה הקדמית 5700'],
+                                    'yahak.png')
+                })
+            }),
+            'helicoop': Group('להק השתתפות ומסוקים', ['לה"מ'], '', {
+                'cooperation': Symbol('היחידה לשיתוף פעולה (יחשת"ף 5620)',
+                                      ['היחידה לשיתוף פעולה', 'יחידה לשיתוף פעולה', 'יחשת"ף 5620',
+                                       'היחידה לשיתוף פעולה 5620', 'יחידה לשיתוף פעולה 5620', 'היחידה לשת"ף',
+                                       'יחידה לשת"ף', 'היחידה לשת"ף 5620', 'יחידה לשת"ף 5620'], 'cooperation.png')
+            }, is_unit=False),
+            'intelligence': Group('להק המודיעין', ['למד"ן', 'להק מודיעין'], '', {
+                'shatal': Symbol('יחידת שירות טכנולוגי למודיעין 121',
+                                 ['יחידת שט"ל 121', 'שט"ל', 'שט"ל 121', 'יחידת שירות טכנולוגי למודיעין', 'יחידה 121',
+                                  'יחידת שט"ל'], 'shatal.png')
+            }, is_unit=False),
+            'equipment': Group('להק הציוד', ['לצ"ד', 'להק ציוד'], '', {
+                'yaa22': Symbol('יחידת האחזקה האווירית (יא"א 22)',
+                                ['יא"א 22', 'יחידת האחזקה האווירית', 'יחידת אחזקה אווירית', 'יחידת האחזקה האווירית 22',
+                                 'יחידת אחזקה אווירית 22'], 'yaa22.png'),
+                'ofek': Symbol('יחידת אופק 324', ['יחידת אופק', 'יחידה 324', 'אופק', '324', 'אופק 324'], 'ofek.png'),
+                'electric': Symbol('בית מלאכה לציוד אלקטרוני (במצ"א 108)',
+                                   ['במצ"א 108', 'במצ"א', 'בית מלאכה לציוד אלקטרוני', 'בית מלאכה לציוד אלקטרוני 108'],
+                                   'electric.png'),
+                'lahav': Symbol('לה"ב (לוגיסטיקה, הנדסה ובקרה)', ['לה"ב', 'לוגיסטיקה, הנדסה ובקרה', 'לוגיסטיקה'], 'lahav.png'),
+                'comms': Symbol('יחידת קשר (י"ק 502)', ['יחידת קשר 502', 'י"ק 502', 'יחידה 502'], 'comms.png')
+            }, is_unit=False),
+            'personnel': Group('להק כוח האדם', ['לכ"א', 'להק כוח אדם'], '', {
+                'health': Group('מפקדת קצין רפואה חילי (מקרפ"ח 5710)',
+                                ['מקרפ"ח 5710', 'מפקדת קצין רפואה חילי', 'מקרפ"ח', '5710',
+                                 'מפקדת קצין רפואה חילי 5710'], 'health.png', {
+                    'health': Symbol('יחידת רפואה אווירית (ירפ"א 112)',
+                                     ['יחידת רפואה אווירית', 'ירפ"א 112', 'ירפ"א',
+                                      'יחידת רפואה אווירית 112'], 'health.png')
+                })
+            }, is_unit=False),
+            'protection': Group('מערך ההגנה האווירית', ['הגנ"א', 'מערך הגנה אווירית', 'הגנה אווירית'], 'protection.png', {
+                'bisla': Symbol('בית הספר להגנה אווירית (ביסל"א 883)',
+                                ['בית הספר להגנה אווירית', 'ביסל"א', 'משאבים', 'מחנה משאבים',
+                                 'בית הספר להגנה אווירית 883', 'ביסל"א 883'], 'bisla.png'),
+                'repair': Symbol('טייסת תחזוקה הגנה אווירית', ['תחזוקה הגנה אווירית', 'תחזוקה הגנ"א', 'טייסת תחזוקה הגנ"א'], 'repair.png'),
+                'comms': Symbol('גדוד קשר 533', ['גדוד קשר', 'י"ק 533', 'יחידת קשר 533', 'יחידה 533', 'גדוד 533'], 'comms.png')
+            }),
+            'control': Group('מערך הבקרה', [], '', {
+                'command': Symbol('מפקדת יחידות הבקרה האווירית (מיח"ה 517)',
+                                  ['מפקדת יחידות הבקרה האווירית', 'מיח"ה 517', 'מיח"ה',
+                                   'מפקדת יחידות הבקרה האווירית 517'], 'command.png')
+            }, is_unit=False),
+            'leadership': Symbol('בית הספר לפיקוד ומנהיגות', ['בית ספר לפיקוד ומנהיגות'], 'leadership.png'),
+            'bases': Group('בסיסים', [], '', {
+                'ramatdavid': Group('בסיס רמת דוד (כנף 1)', ['כנף 1', 'בסיס רמת דוד', 'רמת דוד'], 'ramatdavid.png', {
+                    'valley': Symbol(*squadron_combo('העמק', '109'), 'valley.png'),
+                    'combat': Symbol(*squadron_combo('הקרב הראשונה', '101'), 'combat.png'),
+                    'scorpion': Symbol(*squadron_combo('העקרב', '105'), 'scorpion.png'),
+                    'west': Symbol(*squadron_combo(('מגיני המערב', 'הים היחידה'), '193'), 'west.png')
+                }),
+                'hatzor': Group('בסיס חצור (כנף 4)', ['בסיס חצור', 'חצור', 'כנף 4'], 'hatzor.png', {
+                    'camel': Symbol(*squadron_combo('הגמל המעופף', '100'), 'camel.png'),
+                    'training': Symbol(*squadron_combo('מאמני קרב', '420'), 'training.png')
+                }),
+                'hatzerim': Group('בסיס חצרים (בח"א 6)', ['בסיס חצרים', 'חצרים', 'בח"א 6'], 'hatzerim.png', {
+                    'knights': Symbol(*squadron_combo('אבירי הזנב הכתום', '107'), 'knights.png'),
+                    'hammers': Symbol(*squadron_combo('הפטישים', '69'), 'hammers.png'),
+                    'leopard': Symbol(*squadron_combo('הנמר המעופף', '102'), 'leopard.png'),
+                    'school': Symbol('בית הספר לטיסה (ביס"ט 12)',
+                                     ['ביס"ט 12', 'ביס"ט', 'בית הספר לטיסה', 'בית ספר לטיסה', 'בית הספר לטיסה 12',
+                                      'בית ספר לטיסה 12'], 'school.png')
+                }),
+                'telnof': Group('בסיס תל נוף (בח"א 8)', ['בסיס תל נוף', 'תל נוף', 'בח"א 8'], 'telnof.png', {
+                    'speartip': Symbol(*squadron_combo(('חוד החנית', 'הבז השנייה'), '106'), 'speartip.png'),
+                    'doubletail': Symbol(*squadron_combo('הזנב הכפול', '133'), 'doubletail.png'),
+                    'night': Symbol(*squadron_combo('מובילי הלילה', '114'), 'night.png'),
+                    'raptors': Symbol(*squadron_combo('דורסי הלילה', '118'), 'raptors.png'),
+                    'eagle': Symbol(*squadron_combo(('הנשר הלבן', 'המל"טים השלישית'), '210'), 'eagle.png'),
+                    'experiment': Symbol('טייסת מרכז ניסויי טיסה 5601',
+                                         ['טייסת מנ"ט', 'מנ"ט', 'טייסת 5601', 'מרכז ניסויי טיסה',
+                                          'מרכז ניסויי טיסה 5601', 'מנ"ט 5601'], 'experiment.png'),
+                    'crows': Symbol('יחידת לוחמה אלקטרונית עורבי השחקים 555',
+                                    join_product(('יחידת ל"א', 'לוחמה אלקטרונית', 'יחידת לוחמה אלקטרונית', 'יחידת'),
+                                                 ('עורבי השחקים', 'עורבי השחקים 555')) + join_product(
+                                        ('יחידת ל"א', 'יחידה', 'יחידת לוחמה אלקטרונית', 'לוחמה אלקטרונית'), ('555',)),
+                                    'crows.png'),
+                    'redbaron': Symbol('טייסת הברון האדום', ['הברון האדום'], 'redbaron.png')
+                }),
+                'ovda': Group('בסיס עובדה (בח"א 10)', ['בסיס עובדה', 'עובדה', 'בח"א 10'], 'ovda.png', {
+                    'dragon': Symbol(*squadron_combo(('הדרקון המעופף', 'הטייסת האדומה'), '115'), 'dragon.png'),
+                    'bismat': Symbol('בית הספר למקצועות התעופה (ביסמ"ת)', ['ביסמ"ת', 'בית הספר למקצועות התעופה', 'בית ספר למקצועות התעופה'], 'bismat.png'),
+                    'bislak': Symbol('בית הספר לקצינים של חיל האוויר (ביסל"ק)',
+                                     ['ביסל"ק', 'בית הספר לקצינים', 'בית ספר לקצינים', 'בית הספר לקצינים של חיל האוויר',
+                                      'בית ספר לקצינים של חיל האוויר'], 'bislak.png')
+                }),
+                'haifa': Group('בסיס חיפה (בח"א 21)', ['בסיס חיפה', 'חיפה', 'בח"א 21'], 'haifa.png', {
+                    'bislat': Symbol('בית הספר למקצועות הטכניים (ביסל"ט)',
+                                     ['ביסל"ט', 'בית הספר למקצועות הטכניים', 'בית ספר למקצועות טכניים', 'הטכני'],
+                                     'bislat.png')
+                }),
+                'ramon': Group('בסיס רמון (כנף 25)', ['בסיס רמון', 'רמון', 'כנף 25'], 'ramon.png', {
+                    'negev': Symbol(*squadron_combo('הנגב', '253'), 'negev.png'),
+                    'bat': Symbol(*squadron_combo('העטלף', '119'), 'bat.png'),
+                    'one': Symbol(*squadron_combo('האחת', '201'), 'one.png'),
+                    'magictouch': Symbol(*squadron_combo('מגע הקסם', '190'), 'magictouch.png'),
+                    'hornet': Symbol(*squadron_combo('הצרעה', '113'), 'hornet.png')
+                }),
+                'nevatim': Group('בסיס נבטים (בח"א 28)', ['בסיס נבטים', 'נבטים', 'בח"א 28'], 'nevatim.png', {
+                    'elephants': Symbol(*squadron_combo('הפילים', '103'), 'elephants.png'),
+                    'lions': Symbol(*squadron_combo('אריות הדרום', '116'), 'lions.png'),
+                    'jet': Symbol(*squadron_combo('הסילון הראשונה', '117'), 'jet.png'),
+                    'giants': Symbol(*squadron_combo('ענקי המדבר', '120'), 'giants.png'),
+                    'nahshon': Symbol(*squadron_combo('הנחשון', '122'), 'nahshon.png'),
+                    'yellowbird': Symbol(*squadron_combo('אבירי הציפור הצהובה', '131'), 'yellowbird.png'),
+                    'goldeneagle': Symbol(*squadron_combo(('נשר הזהב', 'החמקן הראשונה'), '140'), 'goldeneagle.png'),
+                    'loading': Symbol('יחידת ההעמסה (יחידה 757)',
+                                      ['יחידת ההעמסה', 'יחידה 757', 'יחידת ההעמסה 757', 'יחידת העמסה',
+                                       'יחידת העמסה 757'], 'loading.png')
+                }),
+                'palmahim': Group('בסיס פלמחים (בח"א 30)', ['', '', ''], 'palmahim.png', {
+                    'desertbirds': Symbol(*squadron_combo('ציפורי המדבר', '123'), 'desertbirds.png'),
+                    'sword': Symbol(*squadron_combo('החרב המתהפכת', '124'), 'sword.png'),
+                    'malat': Symbol(*squadron_combo('המל"טים הראשונה', '200'), 'malat.png'),
+                    'snake': Symbol(*squadron_combo('הנחש השחור', '161'), 'snake.png'),
+                    'firebirds': Symbol(*squadron_combo('ציפורי האש', '166'), 'firebirds.png'),
+                    'katmamtraining': Symbol(*squadron_combo('מאמני כטב"ם ומסוקים', '320'), 'katmamtraining.png'),
+                    'katmamschool': Symbol('בית הספר למפעילי כטמ"ם',
+                                           ['בית ספר למפעילי כטמ"ם', 'בית הספר לכטמ"ם', 'בית ספר לכטב"ם',
+                                            'בית הספר למפעילי כטב"ם'], 'katmamschool.png'),
+                    'repair': Symbol('טייסת תחזוקה פלמחים', ['תחזוקה פלמחים'], 'repair.png'),
+                    'rocket': Symbol('יחידת ניסוי טילים (ינ"ט 151)',
+                                     ['יחידת ניסוי טילים', 'ינ"ט 151', 'ינ"ט', 'יחידת ניסוי טילים 151'], 'rocket.png')
+                })
+            }, is_unit=False)
         }),
         'navy': Group('זרוע הים', ['חיל הים', 'ים'], 'navy.png', {
 
