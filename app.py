@@ -52,8 +52,8 @@ def tzahle_offset():
     except ValueError:
         return 'invalid offset', 400
     player_time = datetime.datetime.utcnow() - datetime.timedelta(minutes=offset)
-    tag, day_no = display.tzahle.get_tag_of_day(player_time.date())
-    session['day_no'] = day_no
+    tag, day_num = display.tzahle.get_tag_by_date(player_time.date())
+    session['day_num'] = day_num
     return content.build_full_image_path(tag)
 
 
