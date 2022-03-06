@@ -33,7 +33,8 @@ body {
 
 #header-left, #header-right {
     flex: 1;
-    margin: 12px;
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
 #header-left {
@@ -62,7 +63,7 @@ header {
 footer {
     text-align: center;
     font-size: calc(1rem - 0.3vw);
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 }
 
 @media (max-width: 960px) {
