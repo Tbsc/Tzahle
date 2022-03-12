@@ -88,6 +88,7 @@ $(() => {
             $.post({
                 url: "/quiz/objection", success: () => {
                     showMessage("הערעור נשלח בהצלחה!")
+                    // TODO prevent objecting more than once
                 }
             })
         })

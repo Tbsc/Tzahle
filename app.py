@@ -36,13 +36,32 @@ def units_dir(tag_path=''):
                            r='r' in request.args)
 
 
+def sanitize_guess(guess: bytes) -> str:
+    return re.sub(r'\s+', ' ', guess.decode('utf-8').translate(content.no_punc_trans).strip())
+
+
+def build_answer_response(tag: content.Symbol, **kwargs) -> dict:
+    tag_path = content.build_full_path(tag)
+    return {'resp_type': 'answer', 'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('units_dir', tag_path=tag_path), **kwargs}
+
+
 @app.route('/tzahle', methods=['GET', 'POST'])
 def tzahle():
     if request.method == 'GET':
+        session.setdefault('tzahle_guesses', [])
         return render_template('tzahle.html', c=content, d=display.tzahle)
-    else:
-        # POST is the player sending guesses
-        return 'not functional yet'
+    else:  # POST, player's guess checking
+        tag = display.tzahle.get_tag_by_day_num(session.get('day_num', None))
+        guess = sanitize_guess(request.data)
+        answer_dict = build_answer_response(tag)
+        guesses = session.get('tzahle_guesses') or []
+        session['tzahle_guesses'] = guesses.append(guess)
+        if guess in tag.alt_names:
+            return answer_dict
+        guess_words = guess.split(" ")
+        # Collect all words in guess that are in any alt name of the tag
+        words_in_answers = set([str(i) for i in range(len(guess_words)) for name in tag.alt_names if guess_words[i] in name])
+        return {'resp_type': 'hint', 'word_indices': list(words_in_answers)}
 
 
 @app.route('/tzahle/offset', methods=['POST'])
@@ -81,10 +100,9 @@ def quiz():
         tag = content.find_unit_tag(tag_path)
         if tag is None:
             return 'bad path', 400
-        answer_dict = {'name': tag.name, 'path': tag_path, 'rel_path': flask.url_for('units_dir', tag_path=tag_path),
-                       'score': sess_score()}
+        answer_dict = build_answer_response(tag, score=sess_score())
 
-        guess = re.sub(r'\s+', ' ', request.data.decode('utf-8').translate(content.no_punc_trans).strip())
+        guess = sanitize_guess(request.data)
 
         if guess == 'giveup':
             return answer_dict

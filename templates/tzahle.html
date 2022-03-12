@@ -71,6 +71,63 @@ main {
     padding-bottom: 12px;
     font-size: 22px
 }
+
+#input-boxes-container {
+    display: flex;
+    flex-flow: column;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    border: 1px solid whitesmoke;
+    background-color: lightgray;
+    color: #3a3a3a;
+    min-width: 280px;
+    max-width: 450px;
+    height: 30px;
+}
+
+body.dark-theme .input-box {
+    border-color: #000000;
+    background-color: dimgray;
+    color: #dcdcdc;
+}
+
+.input-box-content {
+    margin: 6px;
+    font-size: 24px;
+    letter-spacing: -1px;
+}
+
+.input-red-highlight {
+    color: #730000
+}
+
+.input-green-highlight {
+    color: #009500;
+}
+
+body.dark-theme .input-green-highlight {
+    color: #22e622;
+}
+
+#success-dialog {
+    display: none;
+    position: absolute;
+    padding: 16px;
+    margin: auto;
+    z-index: 1;
+    flex-flow: column;
+    background-color: #e3e3e3;
+    border: 1px solid #383838;
+}
+
+body.dark-theme #success-dialog {
+    background-color: slategray;
+    border-color: #1f1f1f;
+}
 </style>
 {% endblock %}
 
@@ -79,15 +136,26 @@ main {
 {% endblock %}
 
 {% block main %}
+<div id="success-dialog">
+    <h1>כל הכבוד!</h1>
+    <div id="success-dialog-controls">
+        <button class="success-control" id="control-copy-result">העתק תוצאה</button>
+    </div>
+</div>
 <div class="unit_tag">
     <a id="unit_tag_link"><img class="unit_tag_img" id="unit_tag_img"></a>
 </div>
-<form id="form-guess" autocomplete="off">
+<form id="form-guess" autocomplete="off" class="start-hidden">
     <input id="input-guess" type="search" value="" disabled required autofocus>
 </form>
+<div id="input-boxes-container">
+    {% for i in range(6) %}
+        <div class="input-box" id="input-box-{{ i }}">
+            <span class="input-box-content"></span>
+        </div>
+    {% endfor %}
+</div>
 <div id="filler"></div>
-<div id="guess-message" class="start-hidden"></div>
-<div id="guess-answer" class="start-hidden"></div>
 <div id="keyboard">
     <div class="key-row">
         <div class="key">0</div>
