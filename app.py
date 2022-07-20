@@ -87,6 +87,7 @@ def quiz():
     returned when giving up, the only difference is that the score counter isn't incremented. If the guess is
     incorrect, the string "incorrect" is returned."""
     if request.method == 'GET':
+        sess_guesses(clear=True)
         tag = display.quiz.random_tag()
         sess_tag_path(content.build_full_path(tag))
         return render_template('quiz.html',
@@ -107,7 +108,7 @@ def quiz():
         if guess == 'giveup':
             return answer_dict
 
-        sess_guesses(guess)
+        sess_guesses(add=guess)
 
         if guess in tag.alt_names:
             answer_dict['score'] += 1
@@ -126,18 +127,21 @@ def quiz_objection():
         return 'no session', 400
     tag_path = sess_tag_path()
     guesses = sess_guesses()
-    if content.find_unit_tag(tag_path) is None:
+    unit_tag = content.find_unit_tag(tag_path)
+    if unit_tag is None:
         return 'bad path', 400
     if len(guesses) == 0:
         return 'no guesses', 400
     with open(os.path.join(app.root_path, 'objections.csv'), "a", encoding='utf-8', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow((tag_path, guesses[-1], ';'.join(guesses[1:])))
+        writer.writerow((tag_path, unit_tag.name, ';'.join(guesses)))
     return 'accepted', 200
 
 
-def sess_guesses(add=None):
-    if add is None:
+def sess_guesses(add=None, clear=None):
+    if clear:
+        session['guesses'] = []
+    elif not add:
         return session.get('guesses', [])
     else:
         guesses = session.get('guesses') or []
